@@ -37,4 +37,3 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-# repo: LD05-fk/Projekt-PROGI
