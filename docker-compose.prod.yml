@@ -1,6 +1,8 @@
 # Produkcija (EC2): baza + backend + Caddy (servira frontend i proxya API).
-# Pokretanje: docker compose -f docker-compose.prod.yml up -d --build
-# Prije toga: napraviti .env (iz .env.example) i izgraditi frontend (npm run build).
+# Imagee gradi i objavljuje CD (.github/workflows/cd.yml) u GitHub Container Registry;
+# poslužitelj ih povlači: docker compose -f docker-compose.prod.yml pull && ... up -d
+# IMAGE_TAG u .env: latest (zadano) ili sha commita za povratak na stariju inačicu.
+# Rezervni ručni deploy bez registryja: docker compose -f docker-compose.prod.yml up -d --build
 services:
   db:
     image: postgres:17
@@ -19,6 +21,7 @@ services:
     # port se namjerno ne izlaže prema van
 
   backend:
+    image: ghcr.io/ld05-fk/artconnect-backend:${IMAGE_TAG:-latest}
     build: ./backend
     restart: unless-stopped
     depends_on:
@@ -35,7 +38,10 @@ services:
     # port se namjerno ne izlaže prema van, dostupan je samo Caddyju
 
   caddy:
-    image: caddy:2
+    image: ghcr.io/ld05-fk/artconnect-web:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
     restart: unless-stopped
     depends_on:
       - backend
@@ -45,8 +51,6 @@ services:
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
     volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./frontend/dist:/srv:ro
       - caddy-data:/data
       - caddy-config:/config
 

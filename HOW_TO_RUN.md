@@ -79,7 +79,7 @@ Korisne naredbe: `npm run lint`, `npm run typecheck`, `npm test`, `npm run forma
 
 Sve (baza, backend, Caddy) vrti se kroz `docker-compose.prod.yml`. Caddy servira izgrađeni frontend i proxya API na backend, pa je cijela aplikacija na jednoj adresi.
 
-> **Status:** deploy će se kasnije raditi automatski kroz GitHub Actions pipeline (postavlja se kad EC2 bude spreman). Do tada, i kao rezerva poslije, vrijedi ručni postupak ispod.
+> **Status:** deploy je automatski: nakon spajanja u `master` i zelenog CI-ja workflow **CD** objavi imagee u GitHub Container Registry i isporuči ih na poslužitelj (`docs/6-…` §6.3). Ručni postupak ispod je rezerva.
 
 ### Jednokratna priprema
 
@@ -98,15 +98,13 @@ Sve (baza, backend, Caddy) vrti se kroz `docker-compose.prod.yml`. Caddy servira
    nano .env   # postavi JAKU DB_PASSWORD; SITE_ADDRESS=:80 ili domena
    ```
 
-### Ručni deploy (privremeno / rezervni postupak)
+### Ručni deploy (rezervni postupak)
 
 ```bash
 cd Projekt-PROGI
 git pull
 
-# frontend se gradi na serveru; Caddy servira frontend/dist
-cd frontend && npm ci && npm run build && cd ..
-
+# gradi imagee na serveru (backend i Caddy s frontendom) umjesto povlačenja iz registryja
 docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml ps
 ```
