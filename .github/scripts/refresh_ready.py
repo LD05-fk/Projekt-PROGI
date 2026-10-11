@@ -17,8 +17,8 @@ import re
 import subprocess
 import sys
 
-OWNER = os.environ.get('PROJECT_OWNER', 'LD-FER')
-NUMBER = int(os.environ.get('PROJECT_NUMBER', '5'))
+OWNER = os.environ.get('PROJECT_OWNER', 'LD05-fk')
+NUMBER = int(os.environ.get('PROJECT_NUMBER', '1'))
 
 TASK = re.compile(r'^([A-Z]+-\d+(?:-[A-Z]+\d*)?) · \[')
 FEATURE = re.compile(r'^([A-Z]+-\d+) · (?!\[)')
