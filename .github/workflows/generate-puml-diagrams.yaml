@@ -141,4 +141,4 @@ jobs:
             git commit -m "docs: regenerate PlantUML diagrams"
             git pull --rebase
             git push
-          fi
+          fi# repo: LD05-fk/Projekt-PROGI
