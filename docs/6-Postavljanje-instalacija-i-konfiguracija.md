@@ -41,7 +41,7 @@ Korak po korak postupak s naredbama je u [HOW_TO_RUN.md](../HOW_TO_RUN.md#lokaln
 Slobodni portovi: 5432 (baza), 8080 (backend), 5173 (frontend).
 
 ```bash
-git clone https://github.com/LD-FER/Projekt-PROGI.git
+git clone https://github.com/LD05-fk/Projekt-PROGI.git
 cd Projekt-PROGI
 ```
 

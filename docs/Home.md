@@ -12,11 +12,11 @@ ArtConnect je web aplikacija u kojoj mladi umjetnici vode portfolio i prijavljuj
 ## Članovi tima i uloge
 
 | Ime i prezime | GitHub korisničko ime | Glavne uloge 		| Sporedne uloge		|
-| Luka Dakić    | LD-FER                | Team Lead		| Documentation, DevOps		|
+| Luka Dakić    | LD05-fk               | Team Lead		| Documentation, DevOps		|
 
 ## Organizacija i proces
 
-Zadaci se prate kao [GitHub Issues](https://github.com/LD-FER/Projekt-PROGI/issues), faze kao Milestones, a ploča je projekt „ArtConnect - razvoj".
+Zadaci se prate kao [GitHub Issues](https://github.com/LD05-fk/Projekt-PROGI/issues), faze kao Milestones, a ploča je projekt „ArtConnect - razvoj".
 
 Pravila grananja, commit poruka i pull requestova opisana su u [README-u, odjeljak „Doprinos"](../README.md#doprinos).
 

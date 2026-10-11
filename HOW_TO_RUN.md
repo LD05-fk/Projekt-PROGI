@@ -92,7 +92,7 @@ Sve (baza, backend, Caddy) vrti se kroz `docker-compose.prod.yml`. Caddy servira
    ```
 3. Klonirati repozitorij i napraviti `.env`:
    ```bash
-   git clone https://github.com/LD-FER/Projekt-PROGI.git
+   git clone https://github.com/LD05-fk/Projekt-PROGI.git
    cd Projekt-PROGI
    cp .env.example .env
    nano .env   # postavi JAKU DB_PASSWORD; SITE_ADDRESS=:80 ili domena

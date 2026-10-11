@@ -2,9 +2,9 @@
 
 Projekt iz kolegija Programsko inženjerstvo (FER, 2026./2027.): web aplikacija u kojoj mladi umjetnici vode portfolio i prijavljuju se na prilike (natječaje, izložbe, radionice) koje objavljuju organizatori.
 
-- **Zadaci:** [Issues](https://github.com/LD-FER/Projekt-PROGI/issues), faze kao [Milestones](https://github.com/LD-FER/Projekt-PROGI/milestones)
-- **Ploča:** [ArtConnect - razvoj](https://github.com/users/LD-FER/projects/5); pogled „Za preuzimanje” prikazuje slobodne zadatke redom rada
-- **Kvaliteta koda:** [SonarCloud](https://sonarcloud.io/project/overview?id=LD-FER_Projekt-PROGI), pregled u pozadini (jednom tjedno), ne utječe na pull requestove
+- **Zadaci:** [Issues](https://github.com/LD05-fk/Projekt-PROGI/issues), faze kao [Milestones](https://github.com/LD05-fk/Projekt-PROGI/milestones)
+- **Ploča:** [ArtConnect - razvoj](https://github.com/users/LD05-fk/projects/1); pogled „Za preuzimanje” prikazuje slobodne zadatke redom rada
+- **Kvaliteta koda:** [SonarCloud](https://sonarcloud.io/project/overview?id=LD05-fk_Projekt-PROGI), pregled u pozadini (jednom tjedno), ne utječe na pull requestove
 
 ## Server
 
@@ -12,7 +12,7 @@ Projekt iz kolegija Programsko inženjerstvo (FER, 2026./2027.): web aplikacija 
 
 Poslužitelj (AWS EC2) nije stalno upaljen, da se štede AWS krediti. Pali ga i gasi bilo koji član tima, bez AWS računa:
 
-1. [Actions → Server](https://github.com/LD-FER/Projekt-PROGI/actions/workflows/server.yml) → **Run workflow**
+1. [Actions → Server](https://github.com/LD05-fk/Projekt-PROGI/actions/workflows/server.yml) → **Run workflow**
 2. odaberite `start`, `stop` ili `status` → **Run workflow**
 3. nakon `start` stranica radi za 1–2 minute; stanje i adresa su u sažetku pokretanja
 
@@ -40,7 +40,7 @@ Workflow [Server](.github/workflows/server.yml) pali i gasi produkcijski posluž
 - **Commit poruke:** `tip: poruka` na hrvatskom, npr. `fix: ispravi preusmjeravanje nakon prijave`. Tipovi: `feat`, `fix`, `chore`, `docs`, `test`, `refactor`.
 - **Pull request:** jedan zadatak po PR-u; u opisu `Closes #broj` (broj issuea).
 - **Uvjeti za spajanje:** zelen CI (provjere `Backend` i `Frontend`) i 1 odobrenje od osobe koja nije autor. Recenzent stvarno pročita i isproba promjenu; autor odredi konkretnog recenzenta.
-- **Testovi:** osnovni testovi za poslovnu logiku i glavne tokove; ne lovi se postotak pokrivenosti. [SonarCloud](https://sonarcloud.io/project/overview?id=LD-FER_Projekt-PROGI) analizira `master` u pozadini (jednom tjedno ili ručno: Actions → SonarCloud → Run workflow) i ne pojavljuje se na pull requestovima.
+- **Testovi:** osnovni testovi za poslovnu logiku i glavne tokove; ne lovi se postotak pokrivenosti. [SonarCloud](https://sonarcloud.io/project/overview?id=LD05-fk_Projekt-PROGI) analizira `master` u pozadini (jednom tjedno ili ručno: Actions → SonarCloud → Run workflow) i ne pojavljuje se na pull requestovima.
 - **Tajne** (`.env`, ključevi, tokeni) nikad ne idu u repozitorij.
 
 ## Predložak
