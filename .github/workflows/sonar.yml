@@ -2,7 +2,7 @@ name: SonarCloud
 
 # Pregled kvalitete koda u pozadini: samo grana master, ručno ili jednom tjedno.
 # Namjerno bez pull_request i push okidača, pa na PR-ovima nema ni provjere ni komentara.
-# Rezultati: https://sonarcloud.io/project/overview?id=LD-FER_Projekt-PROGI
+# Rezultati: https://sonarcloud.io/project/overview?id=LD05-fk_Projekt-PROGI
 on:
   workflow_dispatch:
   schedule:
