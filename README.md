@@ -1,5 +1,8 @@
 # ArtConnect (Projekt PROGI)
 
+[![CI](https://github.com/LD05-fk/Projekt-PROGI/actions/workflows/ci.yml/badge.svg)](https://github.com/LD05-fk/Projekt-PROGI/actions/workflows/ci.yml)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LD05-fk_Projekt-PROGI&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LD05-fk_Projekt-PROGI)
+
 Projekt iz kolegija Programsko inženjerstvo (FER, 2026./2027.): web aplikacija u kojoj mladi umjetnici vode portfolio i prijavljuju se na prilike (natječaje, izložbe, radionice) koje objavljuju organizatori.
 
 - **Zadaci:** [Issues](https://github.com/LD05-fk/Projekt-PROGI/issues), faze kao [Milestones](https://github.com/LD05-fk/Projekt-PROGI/milestones)
