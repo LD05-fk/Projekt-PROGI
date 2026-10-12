@@ -7,7 +7,10 @@
 	# Isti putovi kao u frontend/vite.config.ts (proxy u razvoju)
 	@backend path /api/* /oauth2/* /login/oauth2/* /actuator/*
 	handle @backend {
-		reverse_proxy backend:8080
+		# preglednik nakon prijave na /logs šalje Basic zaglavlje i ovamo; backend ga ne koristi
+		reverse_proxy backend:8080 {
+			header_up -Authorization
+		}
 	}
 
 	# Zapisi kontejnera (Dozzle) za tim; lozinka iz .env poslužitelja
