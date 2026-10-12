@@ -1,0 +1,8 @@
+# Profil prod (docker-compose.prod.yml): JSON zapisi za Dozzle i docker logs
+logging:
+  structured:
+    format:
+      console: logstash
+  level:
+    root: INFO
+    com.zaxxer.hikari: WARN

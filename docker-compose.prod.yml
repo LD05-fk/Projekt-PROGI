@@ -3,10 +3,19 @@
 # poslužitelj ih povlači: docker compose -f docker-compose.prod.yml pull && ... up -d
 # IMAGE_TAG u .env: latest (zadano) ili sha commita za povratak na stariju inačicu.
 # Rezervni ručni deploy bez registryja: docker compose -f docker-compose.prod.yml up -d --build
+
+# Zapisi svih kontejnera rotiraju se: najviše 5 datoteka po 10 MB
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
 services:
   db:
     image: postgres:17
     restart: unless-stopped
+    logging: *logging
     environment:
       POSTGRES_DB: ${DB_NAME:?postavi DB_NAME u .env}
       POSTGRES_USER: ${DB_USER:?postavi DB_USER u .env}
@@ -24,6 +33,7 @@ services:
     image: ghcr.io/ld05-fk/artconnect-backend:${IMAGE_TAG:-latest}
     build: ./backend
     restart: unless-stopped
+    logging: *logging
     depends_on:
       db:
         condition: service_healthy
@@ -35,6 +45,8 @@ services:
       SERVER_FORWARD_HEADERS_STRATEGY: native
       # preskače changesete s kontekstom "dev" (demo podaci)
       SPRING_LIQUIBASE_CONTEXTS: prod
+      # JSON zapisi (application-prod.yml)
+      SPRING_PROFILES_ACTIVE: prod
     # port se namjerno ne izlaže prema van, dostupan je samo Caddyju
 
   caddy:
@@ -43,16 +55,33 @@ services:
       context: .
       dockerfile: deploy/web.Dockerfile
     restart: unless-stopped
+    logging: *logging
     depends_on:
       - backend
+      - dozzle
     ports:
       - "80:80"
       - "443:443"
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      # prijava na /logs (Dozzle); hash iz: docker run --rm caddy:2 caddy hash-password
+      LOGS_USER: ${LOGS_USER:?postavi LOGS_USER u .env}
+      LOGS_PASSWORD_HASH: ${LOGS_PASSWORD_HASH:?postavi LOGS_PASSWORD_HASH u .env}
     volumes:
       - caddy-data:/data
       - caddy-config:/config
+
+  # Pregled zapisa svih kontejnera u pregledniku, na /logs iza Caddyja (basic_auth).
+  # Samo čitanje: akcije i shell su isključeni, port se ne izlaže.
+  dozzle:
+    image: amir20/dozzle:v11
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      DOZZLE_BASE: /logs
+      DOZZLE_NO_ANALYTICS: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   db-data:

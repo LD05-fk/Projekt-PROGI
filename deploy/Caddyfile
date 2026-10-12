@@ -10,6 +10,14 @@
 		reverse_proxy backend:8080
 	}
 
+	# Zapisi kontejnera (Dozzle) za tim; lozinka iz .env poslužitelja
+	handle /logs* {
+		basic_auth {
+			{$LOGS_USER} {$LOGS_PASSWORD_HASH}
+		}
+		reverse_proxy dozzle:8080
+	}
+
 	# Frontend (SPA): sve ostalo vraća index.html
 	handle {
 		root * /srv
