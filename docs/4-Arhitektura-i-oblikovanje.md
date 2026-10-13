@@ -271,27 +271,35 @@ ADR pišite samo za odluku čije će obrazloženje ostati važno i nakon promjen
 
 ## 4.6 Koncepti koji prožimaju sustav
 
-**Cilj:** Prepoznati važan mehanizam ili pravilo oblikovanja koje se primjenjuje u više dijelova aplikacije, opisati gdje se planira primijeniti i ažurirati objašnjenje kako implementacija poprima konačan oblik. Uključite samo koncepte koji su važni za ovaj projekt.
+Paket `hr.fer.artconnect.common` sadrži zajedničke klase za greške, provjeru podataka i straničenje (#8).
 
-| Aspekt | Mehanizam i mjesto primjene | Dokaz u završnoj implementaciji |
-| --- | --- | --- |
-|  |  |  |
+### Greške i provjera podataka
 
-<details>
-<summary><strong>Opis zajedničkog pravila kroz njegovu implementaciju</strong></summary>
+Servis javlja očekivanu grešku ovako: `throw new ApiException(ErrorCode.NOT_FOUND, "Prilika nije pronađena.");` Po potrebi dodaje popis `FieldIssue(field, issue)`. `ErrorCode` sadrži svih 30 API kodova i njihove HTTP statuse.
 
-**Primjer — CrisisMap:**
+`GlobalExceptionHandler` vraća `{ "error": { "code": "...", "message": "...", "details": [...] } }`. Prazan `details` izostavlja se. Neispravni podaci vraćaju 400 `VALIDATION_ERROR`, prevelika datoteka 413 `FILE_TOO_LARGE`, a zabrana u kontroleru 403 `FORBIDDEN`. Neočekivana greška vraća 500 `INTERNAL_ERROR` s općom porukom; detalji iznimke ostaju samo u logu.
 
-| Aspekt | Mehanizam i mjesto primjene | Referenca na kod ili konfiguraciju |
-| --- | --- | --- |
-| Pravilo sustava: autorizacija moderiranja prijava | Poslužiteljski sustav provjerava ovlasti moderatora prije odobravanja ili odbijanja prijave; gumb za prijavu u klijentu nije dovoljna zaštita. | Pri završnom pregledu pokažite provjeru ovlasti u poslužiteljskom sustavu i ispitivanje neovlaštenog pristupa. |
-| Zajedničko implementacijsko pravilo: provjera lokacije | Granica podnošenja prijave odbija nedostajuće ili nevaljane koordinate prije pohrane prijave. | Pri završnom pregledu pokažite pravilo provjere i ispitivanje s nevaljanim koordinatama. |
+Springove HTTP greške zadržavaju izvorni status i zaglavlja: nepostojeća putanja vraća 404 `NOT_FOUND`, pogrešna metoda 405 `VALIDATION_ERROR`, a nepodržani `Content-Type` 415 `UNSUPPORTED_FILE_TYPE`. Iznimka `ResponseStatusException` također zadržava zadani status, uz sigurnu hrvatsku poruku. Klijentske greške ne zapisuju se kao greške poslužitelja; iznimke sa statusom 5xx zapisuju se u log.
 
-**Analiza primjera:** Prvi redak opisuje zaštitu preko granice sustava; drugi pravilo zajedničko različitim putovima podnošenja prijave. Odaberite aspekte koji stvarno utječu na vaš projekt.
+DTO-i koriste Jakarta Validation i `@Valid`. Hrvatski jezik postavlja `CommonWebConfiguration`, a poruke su u `messages_hr.properties`. Kod neispravnog JSON-a polje u detaljima je `body`. Sigurnosne greške koje nastanu prije kontrolera treba obraditi u AUTH konfiguraciji; ovaj handler obrađuje iznimke koje stignu do MVC-a.
 
-Obrasci poput Dependency Injection ili Repository pripadaju ovdje samo kada ih kod stvarno koristi i kada objašnjavaju zajedničko pravilo oblikovanja. Tvrdnja „sustav koristi autentikaciju” sama po sebi ne govori čitatelju gdje se provjera provodi niti što štiti. Sigurnost, bilježenje događaja i obrada pogrešaka ne trebaju svaki zaseban pododjeljak po zadanom pravilu.
+### Straničenje i sortiranje
 
-</details>
+Kontroler prima `@Valid @ModelAttribute PageRequestParams params` i opcionalni `sort`. Zadano je `page=1`, `pageSize=20`. Stranica mora biti najmanje 1, a veličina između 1 i 100; inače se vraća 400. Primjer korištenja:
+
+```java
+Sort order = SortParser.parse(sort, Set.of("deadline"));
+Pageable pageable = params.toPageable(order);
+return PageResponse.from(service.find(pageable));
+```
+
+`deadline` znači uzlazno, `-deadline` silazno. Svaki endpoint predaje svoja dopuštena polja. Bez parametra parser vraća `Sort.unsorted()`; zadani redoslijed bira endpoint. `toPageable` pretvara broj stranice iz API-ja u Springov broj od 0. `PageResponse.from` prima straničeni `Page` s DTO-ima i vraća `{ "data": [...], "meta": { "page": 1, "pageSize": 20, "total": 134 } }`.
+
+### Postavke i testovi
+
+DTO-i s vremenom koriste `OffsetDateTime`. Postavke Jacksona 3 u `application.yml` osiguravaju ISO-8601 tekst i čuvanje vremenskog pomaka. Multipart dopušta 50 MB po datoteci i 51 MB po zahtjevu, prema zadatku [PORT-04-BE1 #104](https://github.com/LD05-fk/Strumfovi/issues/104). Stvarne limite prema namjeni provjeravat će servis iz `system_settings`.
+
+Testovi u `backend/src/test/java/hr/fer/artconnect/common` provjeravaju greške kroz MockMvc, hrvatske poruke, datume, straničenje i sortiranje. Test uploada provjerava obradu iznimke; stvarni upload pripada zadatku za datoteke. Iz `backend` pokrenuti `./mvnw -B verify` uz Javu 25 i Docker. Samo ovi testovi mogu se pokrenuti bez Dockera: `./mvnw -B '-Dtest=hr.fer.artconnect.common.*Test' verify`.
 
 ## 4.7 Arhitekturni rizici i tehnički dug
 

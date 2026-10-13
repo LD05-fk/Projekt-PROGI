@@ -1,6 +1,21 @@
 spring:
   application:
     name: ArtConnect
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+  jackson:
+    datatype:
+      datetime:
+        write-dates-as-timestamps: false
+        write-dates-with-context-time-zone: false
+        adjust-dates-to-context-time-zone: false
+  servlet:
+    multipart:
+      # Gornji limiti uploada prema PORT-04-BE1 (#104).
+      max-file-size: 50MB
+      max-request-size: 51MB
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/artconnect}
     username: ${DB_USER:artconnect}
