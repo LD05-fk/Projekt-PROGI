@@ -24,6 +24,8 @@ ArtConnect je web aplikacija u kojoj mladi umjetnici vode portfolio i prijavljuj
 
 Zadaci se prate kao [GitHub Issues](https://github.com/LD05-fk/Projekt-PROGI/issues), faze kao Milestones, a ploča je projekt „ArtConnect - razvoj".
 
+**Pristup repozitoriju.** Nositelj kolegija (`VladoSruk`) i asistentica grupe Eda Jovičić (`edajovicic`) dodani su kao suradnici repozitorija (Settings → Collaborators, uloga Read/Triage) i imaju pristup ploči „ArtConnect - razvoj”. Pristup ostaje omogućen do kraja projekta.
+
 Pravila grananja, commit poruka i pull requestova opisana su u [README-u, odjeljak „Doprinos"](../README.md#doprinos).
 
 **Zadaci i faze.** Svaki zadatak je jedan Issue s oznakama uloge, složenosti i epika, a pripada Milestoneu svoje faze. Na ploči „ArtConnect - razvoj” prolazi stupce Backlog → Ready → In progress → In review → Done. Zadatak sam prelazi u Ready kad su zatvoreni svi zadaci o kojima ovisi (GitHub Action „Osvježi Ready”), a u Done kad se zatvori, odnosno kad se spoji pull request s `Closes #broj`. Novi zadatak otvara se predloškom „Zadatak”.
