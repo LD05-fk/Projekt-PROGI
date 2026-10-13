@@ -19,6 +19,7 @@ coverage/
 .idea/
 *.iml
 .vscode/
+backend/.mcp.json
 
 # Datoteke operacijskog sustava
 .DS_Store
