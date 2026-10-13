@@ -46,6 +46,13 @@ Workflow [Server](.github/workflows/server.yml) pali i gasi produkcijski posluž
 - **Testovi:** osnovni testovi za poslovnu logiku i glavne tokove; ne lovi se postotak pokrivenosti. [SonarCloud](https://sonarcloud.io/project/overview?id=LD05-fk_Projekt-PROGI) analizira `master` u pozadini (jednom tjedno ili ručno: Actions → SonarCloud → Run workflow) i ne pojavljuje se na pull requestovima.
 - **Tajne** (`.env`, ključevi, tokeni) nikad ne idu u repozitorij.
 
+<a id="ai-usage"></a>
+## Uporaba umjetne inteligencije
+
+Projekt slijedi FER-ova [pravila o primjerenoj uporabi umjetne inteligencije](https://www.fer.unizg.hr/_download/repository/Policy%20on%20the%20appropriate%20use%20of%20artificial%20intelligence%20at%20the%20faculty%20of%20electrical%20engineering%20and%20computing%5B1%5D.pdf).
+
+**Izjava:** Tim nema prethodnog iskustva u vođenju projekta ovog opsega, pa je voditelj tima koristio Claude Code (Anthropic) kao pomoć u organizaciji i infrastrukturi: za razradu zahtjeva iz projektnog zadatka u epike, funkcionalnosti i zadatke (GitHub Issues) te za pripremu CI/CD pipelinea (GitHub Actions, Docker, isporuka na AWS EC2) i pripadne dokumentacije. Opseg, prioritete i odluke donio je tim; generirani zadaci, konfiguracija i tekst pregledani su i ispravljeni prije objave, a infrastruktura je provjerena u radu (CI, isporuka, javna adresa). U alate nisu uneseni pristupni podaci ni osobni podaci. Detaljan zapis: [Home – Izjava o uporabi umjetne inteligencije](docs/Home.md#izjava-o-uporabi-umjetne-inteligencije).
+
 ## Predložak
 
 Struktura dokumentacije i workflow za PlantUML temelje se na [predlošku kolegija Programsko inženjerstvo](https://github.com/VladoSruk/Programsko-inzenjerstvo) (autor Vlado Sruk, CC BY-NC-SA 4.0).
