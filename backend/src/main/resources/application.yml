@@ -13,7 +13,7 @@ spring:
         adjust-dates-to-context-time-zone: false
   servlet:
     multipart:
-      # API UploadLimits dopušta do 50 MiB; PORT-04-BE1 (#104).
+      # Gornji limiti uploada prema PORT-04-BE1 (#104).
       max-file-size: 50MB
       max-request-size: 51MB
   datasource:

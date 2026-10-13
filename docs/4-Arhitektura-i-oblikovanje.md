@@ -271,13 +271,15 @@ ADR pišite samo za odluku čije će obrazloženje ostati važno i nakon promjen
 
 ## 4.6 Koncepti koji prožimaju sustav
 
-Paket `hr.fer.artconnect.common` sadrži zajedničke klase za greške, provjeru podataka i straničenje (#8). Oblik odgovora prati API dokumentaciju iz lokalnog `API.md`.
+Paket `hr.fer.artconnect.common` sadrži zajedničke klase za greške, provjeru podataka i straničenje (#8).
 
 ### Greške i provjera podataka
 
 Servis javlja očekivanu grešku ovako: `throw new ApiException(ErrorCode.NOT_FOUND, "Prilika nije pronađena.");` Po potrebi dodaje popis `FieldIssue(field, issue)`. `ErrorCode` sadrži svih 30 API kodova i njihove HTTP statuse.
 
 `GlobalExceptionHandler` vraća `{ "error": { "code": "...", "message": "...", "details": [...] } }`. Prazan `details` izostavlja se. Neispravni podaci vraćaju 400 `VALIDATION_ERROR`, prevelika datoteka 413 `FILE_TOO_LARGE`, a zabrana u kontroleru 403 `FORBIDDEN`. Neočekivana greška vraća 500 `INTERNAL_ERROR` s općom porukom; detalji iznimke ostaju samo u logu.
+
+Springove HTTP greške zadržavaju izvorni status i zaglavlja: nepostojeća putanja vraća 404 `NOT_FOUND`, pogrešna metoda 405 `VALIDATION_ERROR`, a nepodržani `Content-Type` 415 `UNSUPPORTED_FILE_TYPE`. Iznimka `ResponseStatusException` također zadržava zadani status, uz sigurnu hrvatsku poruku. Klijentske greške ne zapisuju se kao greške poslužitelja; iznimke sa statusom 5xx zapisuju se u log.
 
 DTO-i koriste Jakarta Validation i `@Valid`. Hrvatski jezik postavlja `CommonWebConfiguration`, a poruke su u `messages_hr.properties`. Kod neispravnog JSON-a polje u detaljima je `body`. Sigurnosne greške koje nastanu prije kontrolera treba obraditi u AUTH konfiguraciji; ovaj handler obrađuje iznimke koje stignu do MVC-a.
 
@@ -295,7 +297,7 @@ return PageResponse.from(service.find(pageable));
 
 ### Postavke i testovi
 
-DTO-i s vremenom koriste `OffsetDateTime`. Postavke Jacksona 3 u `application.yml` osiguravaju ISO-8601 tekst i čuvanje vremenskog pomaka. Multipart dopušta 50 MB po datoteci i 51 MB po zahtjevu. #8 navodi 12 MB, ali API `UploadLimits` i #104 dopuštaju 50 MiB; zato je primijenjena ta granica. Stvarne limite prema namjeni provjeravat će servis iz `system_settings`. Ovu razliku treba uskladiti s leaderom prije spajanja PR-a.
+DTO-i s vremenom koriste `OffsetDateTime`. Postavke Jacksona 3 u `application.yml` osiguravaju ISO-8601 tekst i čuvanje vremenskog pomaka. Multipart dopušta 50 MB po datoteci i 51 MB po zahtjevu, prema zadatku [PORT-04-BE1 #104](https://github.com/LD05-fk/Strumfovi/issues/104). Stvarne limite prema namjeni provjeravat će servis iz `system_settings`.
 
 Testovi u `backend/src/test/java/hr/fer/artconnect/common` provjeravaju greške kroz MockMvc, hrvatske poruke, datume, straničenje i sortiranje. Test uploada provjerava obradu iznimke; stvarni upload pripada zadatku za datoteke. Iz `backend` pokrenuti `./mvnw -B verify` uz Javu 25 i Docker. Samo ovi testovi mogu se pokrenuti bez Dockera: `./mvnw -B '-Dtest=hr.fer.artconnect.common.*Test' verify`.
 

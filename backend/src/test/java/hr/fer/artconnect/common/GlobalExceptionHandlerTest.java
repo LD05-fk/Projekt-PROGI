@@ -1,6 +1,7 @@
 package hr.fer.artconnect.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -22,15 +24,19 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 // Ovdje provjeravamo kontrolere i handler. Sigurnosni filtri pripadaju AUTH zadacima.
 @WebMvcTest(GlobalExceptionHandlerTest.TestController.class)
@@ -68,6 +74,39 @@ class GlobalExceptionHandlerTest {
             assertThat(result.andReturn().getResponse().getContentAsString())
                     .doesNotContain("interni podatak", "stackTrace", "IllegalStateException");
         }
+    }
+
+    @Test
+    @ExtendWith(OutputCaptureExtension.class)
+    void nepostojecaPutanjaVraca404BezZapisaGreske(CapturedOutput output) throws Exception {
+        provjeriGresku(mvc.perform(get("/test/nepostojeca-putanja")), 404, "NOT_FOUND")
+                .andExpect(jsonPath("$.error.message").value("Traženi sadržaj nije pronađen."))
+                .andExpect(jsonPath("$.error.details").doesNotExist());
+        assertThat(output.getAll()).doesNotContain("Greška pri obradi zahtjeva");
+    }
+
+    @Test
+    void pogresnaMetodaVraca405IZadrzavaAllow() throws Exception {
+        provjeriGresku(mvc.perform(post("/test/pages")), 405, "VALIDATION_ERROR")
+                .andExpect(header().string("Allow", containsString("GET")))
+                .andExpect(jsonPath("$.error.message").value("HTTP metoda nije dopuštena za ovu putanju."));
+    }
+
+    @Test
+    void nepodrzaniContentTypeVraca415() throws Exception {
+        provjeriGresku(mvc.perform(post("/test/body").contentType(MediaType.TEXT_PLAIN)
+                .content("naslov")), 415, "UNSUPPORTED_FILE_TYPE")
+                .andExpect(jsonPath("$.error.message").value("Vrsta sadržaja zahtjeva nije podržana."));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"400,VALIDATION_ERROR", "401,UNAUTHENTICATED", "403,FORBIDDEN", "404,NOT_FOUND",
+            "405,VALIDATION_ERROR", "409,VALIDATION_ERROR", "413,FILE_TOO_LARGE",
+            "415,UNSUPPORTED_FILE_TYPE", "429,RATE_LIMITED", "503,INTERNAL_ERROR"})
+    void responseStatusExceptionCuvaStatusISkrivaInterniRazlog(int status, String code) throws Exception {
+        var result = provjeriGresku(mvc.perform(get("/test/status/{status}", status)), status, code)
+                .andExpect(jsonPath("$.error.details").doesNotExist());
+        assertThat(result.andReturn().getResponse().getContentAsString()).doesNotContain("interni podatak");
     }
 
     @Test
@@ -167,6 +206,11 @@ class GlobalExceptionHandlerTest {
         @PostMapping("/body")
         Input body(@Valid @RequestBody Input input) {
             return input;
+        }
+
+        @GetMapping("/status/{status}")
+        void responseStatus(@PathVariable int status) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(status), "interni podatak");
         }
 
         @GetMapping("/method")

@@ -111,6 +111,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> unexpectedError(Exception exception) {
+        // Springove HTTP greške zadržavaju svoj status i zaglavlja (npr. Allow za 405).
+        if (exception instanceof org.springframework.web.ErrorResponse response) {
+            var status = response.getStatusCode();
+            ErrorCode code = switch (status.value()) {
+                case 401 -> ErrorCode.UNAUTHENTICATED;
+                case 403 -> ErrorCode.FORBIDDEN;
+                case 404 -> ErrorCode.NOT_FOUND;
+                case 413 -> ErrorCode.FILE_TOO_LARGE;
+                case 415 -> ErrorCode.UNSUPPORTED_FILE_TYPE;
+                case 429 -> ErrorCode.RATE_LIMITED;
+                default -> status.is5xxServerError() ? ErrorCode.INTERNAL_ERROR : ErrorCode.VALIDATION_ERROR;
+            };
+            if (status.is5xxServerError()) {
+                log.error("Greška pri obradi zahtjeva", exception);
+            }
+            String key = status.value() == 405 ? "error.METHOD_NOT_ALLOWED" : "error." + code.name();
+            return ResponseEntity.status(status).headers(response.getHeaders()).body(
+                    new ErrorResponse(code, message(key), List.of()));
+        }
         log.error("Greška pri obradi zahtjeva", exception);
         return error(ErrorCode.INTERNAL_ERROR);
     }
