@@ -1,0 +1,47 @@
+package hr.fer.artconnect.common;
+
+import org.springframework.http.HttpStatus;
+
+/** Kodovi iz API sheme ErrorResponse, s pripadnim HTTP statusima. */
+public enum ErrorCode {
+	VALIDATION_ERROR(HttpStatus.BAD_REQUEST),
+	UNAUTHENTICATED(HttpStatus.UNAUTHORIZED),
+	FORBIDDEN(HttpStatus.FORBIDDEN),
+	ONBOARDING_REQUIRED(HttpStatus.FORBIDDEN),
+	USER_BLOCKED(HttpStatus.FORBIDDEN),
+	NOT_FOUND(HttpStatus.NOT_FOUND),
+	ROLE_ALREADY_CHOSEN(HttpStatus.CONFLICT),
+	LAST_ADMIN(HttpStatus.CONFLICT),
+	SAME_ROLE(HttpStatus.CONFLICT),
+	CANNOT_BLOCK_SELF(HttpStatus.CONFLICT),
+	NOT_PENDING_ORGANIZER(HttpStatus.CONFLICT),
+	ORGANIZER_NOT_APPROVED(HttpStatus.FORBIDDEN),
+	INVALID_STATUS_TRANSITION(HttpStatus.CONFLICT),
+	DEADLINE_PASSED(HttpStatus.CONFLICT),
+	OPPORTUNITY_NOT_OPEN(HttpStatus.CONFLICT),
+	ALREADY_APPLIED(HttpStatus.CONFLICT),
+	HAS_APPLICATIONS(HttpStatus.CONFLICT),
+	PARTICIPANT_NOT_ACCEPTED(HttpStatus.CONFLICT),
+	IMAGE_LIMIT_REACHED(HttpStatus.CONFLICT),
+	FILE_TOO_LARGE(HttpStatus.CONTENT_TOO_LARGE),
+	UNSUPPORTED_FILE_TYPE(HttpStatus.UNSUPPORTED_MEDIA_TYPE),
+	DUPLICATE_CODE(HttpStatus.CONFLICT),
+	IN_USE(HttpStatus.CONFLICT),
+	NOT_ACCEPTED(HttpStatus.CONFLICT),
+	NO_EVENT_DATE(HttpStatus.CONFLICT),
+	CALENDAR_CONSENT_REQUIRED(HttpStatus.FORBIDDEN),
+	CALENDAR_UNAVAILABLE(HttpStatus.BAD_GATEWAY),
+	GEOCODING_UNAVAILABLE(HttpStatus.BAD_GATEWAY),
+	RATE_LIMITED(HttpStatus.TOO_MANY_REQUESTS),
+	INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
+
+	private final HttpStatus httpStatus;
+
+	ErrorCode(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
+	}
+
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
+	}
+}
