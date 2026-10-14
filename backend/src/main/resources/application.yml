@@ -20,9 +20,16 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/artconnect}
     username: ${DB_USER:artconnect}
     password: ${DB_PASSWORD:artconnect}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    # Bez postavljenih konteksta Liquibase primjenjuje sve changesetove
+    contexts: dev
   session:
     jdbc:
-      initialize-schema: always
+      # Shemu sesija stvara Liquibase (changes/001-spring-session.yaml)
+      initialize-schema: never
 management:
   endpoints:
     web:

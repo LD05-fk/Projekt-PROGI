@@ -1,0 +1,216 @@
+databaseChangeLog:
+  - changeSet:
+      id: FND-03-DB-create-art-fields
+      author: lukadimjasevic
+      comment: Šifrarnik područja umjetnosti
+      changes:
+        - createTable:
+            tableName: art_fields
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_art_fields
+              - column:
+                  name: code
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: ux_art_fields_code
+              - column:
+                  name: name
+                  type: varchar(80)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: ux_art_fields_name
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: position
+                  type: smallint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+        - sql:
+            sql: >-
+              ALTER TABLE art_fields
+              ADD CONSTRAINT ck_art_fields_code CHECK (code ~ '^[a-z0-9-]+$')
+      rollback:
+        - dropTable:
+            tableName: art_fields
+
+  - changeSet:
+      id: FND-03-DB-create-opportunity-types
+      author: lukadimjasevic
+      comment: Šifrarnik vrsta prilika
+      changes:
+        - createTable:
+            tableName: opportunity_types
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_opportunity_types
+              - column:
+                  name: code
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: ux_opportunity_types_code
+              - column:
+                  name: name
+                  type: varchar(80)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: ux_opportunity_types_name
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: position
+                  type: smallint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+        - sql:
+            sql: >-
+              ALTER TABLE opportunity_types
+              ADD CONSTRAINT ck_opportunity_types_code CHECK (code ~ '^[a-z0-9-]+$')
+      rollback:
+        - dropTable:
+            tableName: opportunity_types
+
+  - changeSet:
+      id: FND-03-DB-seed-art-fields
+      author: lukadimjasevic
+      comment: Početna područja umjetnosti
+      changes:
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: slikarstvo }
+              - column: { name: name, value: Slikarstvo }
+              - column: { name: position, valueNumeric: 1 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: fotografija }
+              - column: { name: name, value: Fotografija }
+              - column: { name: position, valueNumeric: 2 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: skulptura }
+              - column: { name: name, value: Skulptura }
+              - column: { name: position, valueNumeric: 3 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: ilustracija }
+              - column: { name: name, value: Ilustracija }
+              - column: { name: position, valueNumeric: 4 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: digitalna-umjetnost }
+              - column: { name: name, value: Digitalna umjetnost }
+              - column: { name: position, valueNumeric: 5 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: grafika }
+              - column: { name: name, value: Grafika }
+              - column: { name: position, valueNumeric: 6 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: keramika }
+              - column: { name: name, value: Keramika }
+              - column: { name: position, valueNumeric: 7 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: instalacija }
+              - column: { name: name, value: Instalacija }
+              - column: { name: position, valueNumeric: 8 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: video-umjetnost }
+              - column: { name: name, value: Video umjetnost }
+              - column: { name: position, valueNumeric: 9 }
+        - insert:
+            tableName: art_fields
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: ostalo }
+              - column: { name: name, value: Ostalo }
+              - column: { name: position, valueNumeric: 10 }
+      rollback:
+        - delete:
+            tableName: art_fields
+            where: "code in ('slikarstvo', 'fotografija', 'skulptura', 'ilustracija', 'digitalna-umjetnost', 'grafika', 'keramika', 'instalacija', 'video-umjetnost', 'ostalo')"
+
+  - changeSet:
+      id: FND-03-DB-seed-opportunity-types
+      author: lukadimjasevic
+      comment: Početne vrste prilika
+      changes:
+        - insert:
+            tableName: opportunity_types
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: natjecaj }
+              - column: { name: name, value: Natječaj }
+              - column: { name: position, valueNumeric: 1 }
+        - insert:
+            tableName: opportunity_types
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: izlozba }
+              - column: { name: name, value: Izložba }
+              - column: { name: position, valueNumeric: 2 }
+        - insert:
+            tableName: opportunity_types
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: radionica }
+              - column: { name: name, value: Radionica }
+              - column: { name: position, valueNumeric: 3 }
+        - insert:
+            tableName: opportunity_types
+            columns:
+              - column: { name: id, valueComputed: gen_random_uuid() }
+              - column: { name: code, value: ostalo }
+              - column: { name: name, value: Ostalo }
+              - column: { name: position, valueNumeric: 4 }
+      rollback:
+        - delete:
+            tableName: opportunity_types
+            where: "code in ('natjecaj', 'izlozba', 'radionica', 'ostalo')"
