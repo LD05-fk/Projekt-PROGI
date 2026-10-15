@@ -24,7 +24,7 @@ name: Generate PlantUML diagrams
 on:
   push:
     branches:
-      - master
+      - docs/diagrams
     paths:
       - "docs/puml/**/*.puml"
       - ".github/workflows/generate-puml-diagrams.yaml"
@@ -54,8 +54,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    # Publish only from master, even when started manually via workflow_dispatch.
-    if: github.ref == 'refs/heads/master'
+    # Publish only from docs/diagrams, even when started manually via workflow_dispatch.
+    if: github.ref == 'refs/heads/docs/diagrams'
 
     env:
       PLANTUML_VERSION: "1.2025.4"
