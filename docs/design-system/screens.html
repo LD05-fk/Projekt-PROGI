@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ArtConnect – ekrani (dizajn)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#4338CA;--primary-dark:#3730A3;--primary-light:#EEF2FF;--secondary:#BE185D;--bg:#FAFAF9;--surface:#fff;--text:#1C1917;--text2:#57534E;--divider:#D6D3D1;--error:#B91C1C;--warning:#B45309;--success:#15803D}
+*{box-sizing:border-box}
+body{margin:0;font:16px/24px Inter,system-ui,sans-serif;background:#E7E5E4;color:var(--text)}
+:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+/* ---- alat za pregled ---- */
+#tool{position:sticky;top:0;z-index:50;background:#1C1917;color:#fff;padding:12px 16px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;font-size:14px}
+#tool label{display:flex;gap:8px;align-items:center}
+#tool select{height:36px;border-radius:8px;border:0;padding:0 8px;font:14px Inter,sans-serif;max-width:340px}
+#tool .seg{display:flex;border-radius:8px;overflow:hidden;border:1px solid #57534E}
+#tool .seg button{background:none;border:0;color:#fff;padding:6px 14px;font:600 13px Inter,sans-serif;cursor:pointer}
+#tool .seg button.on{background:var(--primary)}
+#tool .info{color:#D6D3D1;font-size:12px;flex-basis:100%}
+#states{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px}
+#states button{border:1px solid var(--divider);background:#fff;border-radius:16px;padding:4px 14px;font:600 13px Inter,sans-serif;cursor:pointer}
+#states button.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+#stage{padding:8px 16px 48px;display:flex;justify-content:center}
+#frame{width:1100px;max-width:100%;background:var(--bg);border:2px solid #A8A29E;border-radius:12px;overflow:hidden;position:relative;min-height:700px;display:flex;flex-direction:column;container-type:inline-size;container-name:f;box-shadow:0 12px 32px rgba(28,25,23,.2)}
+/* ---- komponente ---- */
+.hd{display:flex;align-items:center;gap:16px;height:64px;padding:0 24px;background:#fff;border-bottom:1px solid var(--divider);flex:none}
+.logo{font-weight:700;font-size:20px;color:var(--primary);text-decoration:none;white-space:nowrap}
+.nav{display:flex;gap:4px;flex:1}
+.nav a{padding:8px 12px;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px}
+.nav a.on{background:var(--primary-light);color:#312E81}
+.burger{display:none;width:44px;height:44px;border:0;background:none;font-size:24px;cursor:pointer;margin-left:-12px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font:600 13px Inter,sans-serif;flex:none}
+.pg{flex:1;padding:32px;width:100%;max-width:1200px;margin:0 auto}
+.ft{flex:none;border-top:1px solid var(--divider);background:#fff;padding:16px 24px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--text2)}
+h1,h2,h3,h4{margin:0}
+h1{font-size:36px;line-height:44px;font-weight:700}h2{font-size:30px;line-height:38px;font-weight:700}h3{font-size:24px;line-height:32px;font-weight:600}h4{font-size:18px;line-height:26px;font-weight:600}
+.sub{color:var(--text2);margin:4px 0 0}
+.btn{min-height:44px;padding:0 20px;border-radius:8px;border:2px solid transparent;font:600 14px Inter,sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none;white-space:nowrap}
+.btn.p{background:var(--primary);color:#fff}.btn.s{background:#fff;color:var(--primary);border-color:var(--primary)}.btn.d{background:var(--error);color:#fff}.btn.t{background:none;color:var(--primary)}
+.btn.sm{min-height:36px;padding:0 12px}.btn:disabled{background:#E7E5E4;color:#78716C;border-color:transparent;cursor:not-allowed}
+.gbtn{background:#fff;color:#1f1f1f;border:1px solid #747775;font-weight:600}
+.gbtn b{font-size:18px;background:conic-gradient(#EA4335 0 25%,#FBBC05 0 50%,#34A853 0 75%,#4285F4 0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chip{display:inline-block;padding:2px 12px;border-radius:16px;font-size:12px;line-height:20px;font-weight:600;white-space:nowrap}
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(28,25,23,.08);padding:16px;min-width:0}
+.card.hov:hover{box-shadow:0 4px 12px rgba(28,25,23,.12)}
+.card p{margin:4px 0 0;font-size:14px;line-height:20px;color:var(--text2)}
+.cols{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+.cols.g4{grid-template-columns:repeat(4,1fr)}.cols.c2{grid-template-columns:repeat(2,1fr)}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.sp{flex:1}
+.fld{margin-bottom:16px;min-width:0}.fld label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.in{width:100%;min-height:44px;border:1px solid #78716C;border-radius:8px;padding:10px 12px;font:16px/24px Inter,sans-serif;background:#fff;color:var(--text)}
+.in.ro{background:#F5F5F4;color:var(--text2)}.in.er{border:2px solid var(--error)}
+textarea.in{min-height:96px}
+.hint{font-size:12px;line-height:16px;color:var(--text2);margin-top:4px}.hint.er{color:var(--error)}
+.al{border-radius:8px;padding:12px 16px;font-size:14px;line-height:20px;display:flex;gap:12px;margin-bottom:16px}
+.al.er{background:#FEE2E2;color:#991B1B}.al.ok{background:#DCFCE7;color:#166534}.al.wa{background:#FEF3C7;color:#92400E}.al.in2{background:#DBEAFE;color:#1E40AF}
+.sk{background:linear-gradient(90deg,#E7E5E4,#F5F5F4,#E7E5E4);border-radius:8px;height:16px;margin:8px 0}
+.empty{text-align:center;padding:48px 16px;border:2px dashed var(--divider);border-radius:12px;color:var(--text2)}
+.empty .ic{font-size:40px}.empty b{display:block;color:var(--text);font-size:18px;margin:8px 0 4px}
+.ov{position:absolute;inset:0;background:rgba(28,25,23,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.dlg{background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(28,25,23,.25);padding:24px;width:480px;max-width:100%}
+.dlg h4{font-size:20px;margin-bottom:8px}.dlg .act{display:flex;justify-content:flex-end;gap:8px;margin-top:24px;flex-wrap:wrap}
+.dlg ul{margin:8px 0;padding-left:20px;font-size:14px;color:var(--text2)}
+.img{border-radius:8px;aspect-ratio:4/3;background:linear-gradient(135deg,#C7D2FE,#FBCFE8)}
+.img.v2{background:linear-gradient(135deg,#FDE68A,#FCA5A5)}.img.v3{background:linear-gradient(135deg,#A7F3D0,#93C5FD)}.img.v4{background:linear-gradient(135deg,#DDD6FE,#FDE68A)}
+.tb{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(28,25,23,.08)}
+.tb caption{text-align:left;padding:16px;font-weight:600;font-size:16px}
+.tb th{text-align:left;padding:10px 16px;background:#F5F5F4;font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.03em}
+.tb td{padding:12px 16px;border-top:1px solid var(--divider)}
+.pag{display:flex;gap:4px;justify-content:center;margin-top:24px}.pag span{min-width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;font-weight:600;font-size:14px;color:var(--text)}.pag .on{background:var(--primary);color:#fff}
+.map{position:relative;border-radius:12px;overflow:hidden;background:#DDE7DA;background-image:linear-gradient(#cfd9cb 1px,transparent 1px),linear-gradient(90deg,#cfd9cb 1px,transparent 1px);background-size:40px 40px;border:1px solid var(--divider);min-height:260px;height:100%}
+.map:before{content:"";position:absolute;left:-10%;top:40%;width:120%;height:14px;background:#fff;transform:rotate(-8deg);opacity:.8}
+.map:after{content:"";position:absolute;left:55%;top:-10%;height:120%;width:14px;background:#fff;transform:rotate(12deg);opacity:.8}
+.pin{position:absolute;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--secondary);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:2}
+.map .attr{position:absolute;right:0;bottom:0;background:rgba(255,255,255,.85);font-size:11px;padding:2px 6px;z-index:3}
+.pop{position:absolute;z-index:4;background:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.25);padding:8px 12px;font-size:13px;line-height:18px;width:180px}
+.seg2{display:inline-flex;border:1px solid var(--primary);border-radius:8px;overflow:hidden}.seg2 span{padding:8px 16px;font:600 14px Inter,sans-serif;color:var(--primary)}.seg2 .on{background:var(--primary);color:#fff}
+.rc{border:2px solid var(--divider);border-radius:12px;padding:20px;background:#fff;cursor:pointer;text-align:left}
+.rc.sel{border-color:var(--primary);background:var(--primary-light)}
+.rc .ic{font-size:32px}.rc h4{margin:8px 0 4px}.rc p{margin:0;color:var(--text2);font-size:14px;line-height:20px}
+.side{display:grid;grid-template-columns:220px 1fr;gap:24px}
+.side nav a{display:block;padding:10px 12px;border-radius:8px;font-weight:600;font-size:14px;color:var(--text);text-decoration:none}
+.side nav a.on{background:var(--primary-light);color:#312E81}
+.drawer{position:absolute;inset:0;display:flex;z-index:30}.drawer .pnl{width:280px;max-width:85%;background:#fff;padding:16px;box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.drawer .pnl a{display:block;padding:12px;border-radius:8px;font-weight:600;color:var(--text);text-decoration:none}
+.drawer .pnl a.on{background:var(--primary-light);color:#312E81}.drawer .scr{flex:1;background:rgba(28,25,23,.55)}
+.menu{position:absolute;right:24px;top:60px;z-index:25;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);width:260px;padding:8px 0}
+.menu .who{padding:8px 16px 12px;border-bottom:1px solid var(--divider)}.menu a{display:block;padding:10px 16px;font-size:14px;font-weight:600;color:var(--text);text-decoration:none}
+.bar{background:var(--primary-light);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:14px}
+.kpi{font-size:48px;line-height:56px;font-weight:700;color:var(--primary)}
+.note{font-size:12px;color:var(--text2)}
+.stack{display:flex;flex-direction:column;gap:16px}
+.mt{margin-top:24px}.mb{margin-bottom:16px}
+.fil{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:end}.fil .fld{margin:0;min-width:150px;flex:1}
+.flt-btn{display:none}
+.hs{display:flex;gap:16px;flex-wrap:wrap}
+.mrow{display:none}
+/* ---- prijelomne točke prema širini okvira ---- */
+@container f (max-width:899px){
+  .pg{padding:24px}.hd{padding:0 16px}.cols{grid-template-columns:repeat(2,1fr)}.cols.g4{grid-template-columns:repeat(3,1fr)}
+  .nav{display:none}.burger{display:inline-block}.sp-nav{flex:1}
+  .side{grid-template-columns:1fr}.side nav{display:flex;gap:4px;overflow:auto}
+  .flt-btn{display:inline-flex}.fil.full{display:none}
+  .split{grid-template-columns:1fr!important}
+}
+@container f (max-width:599px){
+  .pg{padding:16px}.cols,.cols.c2{grid-template-columns:1fr}.cols.g4{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:28px;line-height:36px}h2{font-size:24px;line-height:32px}
+  .hide-xs{display:none!important}.tb.resp thead{display:none}.tb.resp tr{display:block;border-top:1px solid var(--divider);padding:12px 16px}.tb.resp td{display:block;border:0;padding:2px 0}
+  .btn.full-xs{width:100%}.dlg{width:100%;height:100%;border-radius:0;display:flex;flex-direction:column}.dlg .act{margin-top:auto}.ov.fs{padding:0}
+  .menu{right:8px;width:calc(100% - 16px)}
+}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+</style>
+</head>
+<body>
+<div id="tool">
+  <strong>ArtConnect · ekrani</strong>
+  <label>Ekran <select id="sc" aria-label="Ekran"></select></label>
+  <div class="seg" id="vp" role="group" aria-label="Širina"><button data-w="375">Mobitel</button><button data-w="768">Tablet</button><button data-w="1100" class="on">Desktop</button></div>
+  <div class="info" id="info"></div>
+</div>
+<div id="states" role="group" aria-label="Stanje"></div>
+<div id="stage"><div id="frame"></div></div>
+
+<script>
+/* ---------- pomoćne funkcije ---------- */
+const CH={PREPARATION:['U pripremi','#E7E5E4','#44403C'],OPEN:['Otvorena','#DCFCE7','#166534'],CLOSED:['Zatvorena','#FEE2E2','#991B1B'],SELECTION:['Odabir u tijeku','#FEF3C7','#92400E'],FINISHED:['Završena','#EEF2FF','#312E81'],ARCH:['Arhivirano','#E7E5E4','#44403C'],HID:['Skriveno od administratora','#FEF3C7','#92400E'],PUB:['Javno','#DCFCE7','#166534'],PRIV:['Privatno','#E7E5E4','#44403C'],OK:['Odobren','#DCFCE7','#166534'],WAIT:['Čeka odobrenje','#FEF3C7','#92400E'],ACT:['Aktivan','#DCFCE7','#166534'],BLK:['Blokiran','#FEE2E2','#991B1B'],ART:['Umjetnik','#EEF2FF','#312E81'],ORG:['Organizator','#DBEAFE','#1E40AF'],ADM:['Administrator','#E7E5E4','#44403C'],DONE:['Ostvareno preko ArtConnecta','#DCFCE7','#166534']};
+const chip=k=>{const c=CH[k];return `<span class="chip" style="background:${c[1]};color:${c[2]}">${c[0]}</span>`};
+const NAV={guest:[['Prilike']],artist:[['Prilike'],['Portfolio'],['Moje prijave']],organizer:[['Prilike'],['Moje prilike'],['Statistika']],admin:[['Prilike'],['Administracija']]};
+const INI={artist:'MH',organizer:'GG',admin:'AD'};
+const hd=(role,active,opts={})=>{
+  const nav=NAV[role].map(n=>`<a href="#" class="${n[0]===active?'on':''}">${n[0]}</a>`).join('');
+  const right=role==='guest'?`<a class="btn gbtn sm" href="#"><b>G</b><span class="hide-xs">Prijava s Googleom</span><span class="hide-xs" style="display:none"></span></a>`:`<span class="av" aria-label="Korisnički izbornik">${INI[role]}</span>`;
+  const guestXs=role==='guest'?'':'';
+  return `<header class="hd"><button class="burger" aria-label="Otvori izbornik">☰</button><a class="logo" href="#">ArtConnect</a><nav class="nav" aria-label="Glavna navigacija">${nav}</nav><span class="sp-nav sp"></span>${right}</header>`};
+const ft=()=>`<footer class="ft"><span>© 2026 ArtConnect</span><span>Kontakt · Uvjeti korištenja · Privatnost</span></footer>`;
+const page=(role,active,body,extra='')=>hd(role,active)+`<main class="pg">${body}</main>`+ft()+extra;
+const drawer=(role,active)=>`<div class="drawer"><div class="pnl"><div class="logo" style="margin-bottom:16px;display:block">ArtConnect</div>${NAV[role].map(n=>`<a href="#" class="${n[0]===active?'on':''}">${n[0]}</a>`).join('')}<hr style="border:0;border-top:1px solid var(--divider);margin:8px 0">${role==='guest'?'':'<a href="#">Profil</a><a href="#">Odjava</a>'}</div><div class="scr"></div></div>`;
+const menu=(role)=>`<div class="menu"><div class="who"><b>Marta Horvat</b><div class="note">marta.horvat@gmail.com</div><div style="margin-top:6px">${chip(role==='artist'?'ART':role==='organizer'?'ORG':'ADM')}</div></div>${role==='admin'?'':'<a href="#">Profil</a>'}<a href="#">Odjava</a></div>`;
+const fld=(l,v='',o={})=>`<div class="fld"><label>${l}</label>${o.area?`<textarea class="in ${o.er?'er':''}" rows="3">${v}</textarea>`:`<div class="in ${o.ro?'ro':''} ${o.er?'er':''}" style="${v?'':'color:#78716C'}">${v||o.ph||''}</div>`}${o.hint?`<div class="hint ${o.er?'er':''}">${o.hint}</div>`:''}</div>`;
+const skel=n=>Array.from({length:n},(_,i)=>`<div class="sk" style="width:${90-i*12}%"></div>`).join('');
+const dlgConfirm=(t,txt,btn,extra='')=>`<div class="ov fs"><div class="dlg" role="dialog" aria-label="${t}"><h4>${t}</h4><p style="margin:0;color:var(--text2)">${txt}</p>${extra}<div class="act"><button class="btn s">Odustani</button><button class="btn d">${btn}</button></div></div></div>`;
+const err=(m)=>`<div class="al er" role="alert"><span>⚠</span><span>${m}</span></div>`;
+const ok=(m)=>`<div class="al ok" role="status"><span>✓</span><span>${m}</span></div>`;
+const art=(i,t,y,tech,extra='')=>`<div class="card hov"><div class="img v${(i%4)+1}" role="img" aria-label="Fotografija djela ${t}"></div><div class="row" style="margin-top:12px"><h4 style="font-size:16px;line-height:24px">${t}</h4></div><p>${tech}, ${y}.</p><div class="row" style="margin-top:8px">${extra}</div></div>`;
+const opp=(id,t,org,st,deadline,type,city)=>`<div class="card hov"><div class="row">${chip(st)}<span class="sp"></span><span class="note">${type}</span></div><h4 style="margin-top:8px">${t}</h4><p>${org} · ${city}</p><p>Rok prijave: <b style="color:var(--text)">${deadline}</b></p><div style="margin-top:12px"><a class="btn s sm" href="#">Detalji</a></div></div>`;
+
+/* ---------- ekrani ---------- */
+const S=[];
+
+S.push({id:'auth1',title:'AUTH-01 · Početna, korisnički izbornik, „Prijava potrebna” (#71)',info:'Posjetitelj vidi gumb „Prijava s Googleom”; prijavljeni korisnik avatar s izbornikom. Zaštićene rute bez prijave prikazuju panel „Prijava potrebna”.',states:{
+'Posjetitelj':()=>page('guest','Prilike',`<div style="max-width:720px;margin:48px auto;text-align:center"><h1>Umjetnici i prilike na jednom mjestu</h1><p class="sub" style="font-size:18px;line-height:28px">ArtConnect povezuje umjetnike s organizatorima izložbi, natječaja i rezidencija.</p><div class="row" style="justify-content:center;margin-top:32px"><a class="btn gbtn" href="#"><b>G</b> Prijava s Googleom</a><a class="btn s" href="#">Pregledaj prilike</a></div></div>`),
+'Greška prijave':()=>page('guest','Prilike',`<div style="max-width:720px;margin:24px auto;text-align:center">${err('Prijava nije uspjela. Pokušajte ponovno.')}<h1>Umjetnici i prilike na jednom mjestu</h1><p class="sub" style="font-size:18px;line-height:28px">ArtConnect povezuje umjetnike s organizatorima izložbi, natječaja i rezidencija.</p><div class="row" style="justify-content:center;margin-top:32px"><a class="btn gbtn" href="#"><b>G</b> Prijava s Googleom</a><a class="btn s" href="#">Pregledaj prilike</a></div></div>`),
+'Blokiran račun':()=>page('guest','Prilike',`<div style="max-width:720px;margin:24px auto;text-align:center">${err('Vaš račun je blokiran. Obratite se administratoru.')}<h1>Umjetnici i prilike na jednom mjestu</h1><div class="row" style="justify-content:center;margin-top:32px"><a class="btn s" href="#">Pregledaj prilike</a></div></div>`),
+'Prijavljen (umjetnik)':()=>page('artist','Prilike',`<h1>Bok, Marta!</h1><p class="sub">Što želite danas napraviti?</p><div class="cols mt"><div class="card hov"><h4>Pregledaj prilike</h4><p>Pronađite natječaje i izložbe za svoj rad.</p><div style="margin-top:12px"><a class="btn p sm" href="#">Prilike</a></div></div><div class="card hov"><h4>Moj portfolio</h4><p>Dodajte i uredite svoja djela.</p><div style="margin-top:12px"><a class="btn p sm" href="#">Portfolio</a></div></div><div class="card hov"><h4>Moje prijave</h4><p>Pratite status poslanih prijava.</p><div style="margin-top:12px"><a class="btn p sm" href="#">Prijave</a></div></div></div>`),
+'Izbornik korisnika':()=>page('artist','Prilike',`<h1>Bok, Marta!</h1>`,menu('artist')),
+'Mobilni izbornik':()=>page('artist','Prilike',`<h1>Bok, Marta!</h1>`,drawer('artist','Prilike')),
+'Učitavanje sesije':()=>`<header class="hd"><button class="burger">☰</button><a class="logo" href="#">ArtConnect</a><span class="sp"></span><div class="sk" style="width:36px;height:36px;border-radius:50%;margin:0"></div></header><main class="pg">${skel(3)}</main>${ft()}`,
+'Prijava potrebna':()=>page('guest','Prilike',`<div style="max-width:480px;margin:48px auto"><div class="card" style="text-align:center;padding:32px"><div style="font-size:40px">🔒</div><h3 style="margin-top:8px">Prijava potrebna</h3><p style="font-size:16px;line-height:24px;margin:8px 0 24px">Za pristup ovoj stranici prijavite se svojim Google računom.</p><a class="btn gbtn" href="#"><b>G</b> Prijava s Googleom</a></div></div>`)
+}});
+
+S.push({id:'auth2',title:'AUTH-02 · Odabir uloge (#76)',info:'Ekran /onboarding, prikazuje se novom korisniku bez uloge. Ulogu se bira samo jednom.',states:{
+'Ništa odabrano':()=>page('guest','',roleChoice(null,false)),
+'Odabrano (Umjetnik)':()=>page('guest','',roleChoice('a',false)),
+'Slanje':()=>page('guest','',roleChoice('a',true)),
+'Uloga već odabrana (409)':()=>page('guest','',`<div style="max-width:560px;margin:48px auto">${err('Ulogu ste već odabrali. Preusmjeravamo vas na početnu…')}</div>`)
+}});
+function roleChoice(sel,busy){return `<div style="max-width:720px;margin:0 auto"><h2>Dobro došli! Tko ste vi?</h2><p class="sub">Odaberite ulogu kojom ćete koristiti ArtConnect.</p><div class="cols c2 mt" role="radiogroup" aria-label="Uloga"><div class="rc ${sel==='a'?'sel':''}" role="radio" aria-checked="${sel==='a'}" tabindex="0"><div class="ic">🎨</div><h4>Umjetnik</h4><p>Izradite portfolio, pregledajte prilike i šaljite prijave.</p></div><div class="rc ${sel==='o'?'sel':''}" role="radio" aria-checked="${sel==='o'}" tabindex="0"><div class="ic">🏛</div><h4>Organizator</h4><p>Objavite prilike i pregledajte prijave umjetnika.</p></div></div><div class="al wa mt"><span>ⓘ</span><span>Ulogu birate samo jednom. Kasnije je može promijeniti samo administrator.</span></div><button class="btn p full-xs" ${sel&&!busy?'':'disabled'}>${busy?'Spremanje…':'Potvrdi'}</button></div>`}
+
+S.push({id:'auth3',title:'AUTH-03 · Profil organizatora (#80)',info:'/profile za organizatora: ime s Googlea je samo za čitanje, uređuje se naziv organizacije (do 200 znakova).',states:{
+'Zadano':()=>page('organizer','',orgProfile({})),
+'Greška validacije':()=>page('organizer','',orgProfile({er:true})),
+'Uspjeh':()=>page('organizer','',orgProfile({ok:true})),
+'Odobren':()=>page('organizer','',orgProfile({appr:true})),
+'Učitavanje':()=>page('organizer','',`<h2>Moj profil</h2><div class="card mt" style="max-width:640px">${skel(4)}</div>`),
+'Greška poslužitelja':()=>page('organizer','',orgProfile({srv:true}))
+}});
+function orgProfile(o){return `<div style="max-width:640px"><h2>Moj profil</h2>${o.ok?'<div style="margin-top:16px">'+ok('Profil spremljen.')+'</div>':''}${o.srv?'<div style="margin-top:16px">'+err('Nešto je pošlo po zlu. Pokušajte ponovno.')+'</div>':''}<div class="card mt"><div class="row mb"><span class="av" style="width:56px;height:56px;font-size:18px">GG</span><div><b>Galerija Gradec</b><div class="note">galerija.gradec@gmail.com</div></div><span class="sp"></span>${chip(o.appr?'OK':'WAIT')}</div>${fld('Ime i prezime (s Google računa)','Goran Grgić',{ro:true})}${fld('Naziv organizacije',o.er?'':'Galerija Gradec',{er:o.er,ph:'Npr. Galerija Gradec',hint:o.er?'Naziv organizacije je obavezan.':'0–200 znakova · 15/200'})}${o.appr?'':'<div class="al in2"><span>ⓘ</span><span>Dok administrator ne odobri vaš račun, ne možete objavljivati prilike.</span></div>'}<button class="btn p full-xs">Spremi</button></div></div>`}
+
+S.push({id:'port1',title:'PORT-01/02 · Profil umjetnika i prethodne izložbe (#86, #92)',info:'/profile za umjetnika: podaci, područja, poveznice, a ispod njih odjeljak „Prethodne izložbe i projekti”. Dijalozi su preko cijelog zaslona na mobitelu.',states:{
+'Zadano':()=>page('artist','',artistProfile({})),
+'Prazan profil':()=>page('artist','',artistProfile({empty:true})),
+'Greške po polju':()=>page('artist','',artistProfile({er:true})),
+'Dodaj izložbu (dijalog)':()=>page('artist','',artistProfile({}),`<div class="ov fs"><div class="dlg" role="dialog" aria-label="Dodaj izložbu"><h4>Dodaj izložbu ili projekt</h4>${fld('Naslov','',{ph:'Npr. Skupna izložba „Svjetlo”'})}<div class="split"><div>${fld('Godina','2024')}</div><div>${fld('Mjesto','Zagreb')}</div></div><div class="act"><button class="btn s">Odustani</button><button class="btn p">Spremi</button></div></div></div>`),
+'Brisanje izložbe':()=>page('artist','',artistProfile({}),dlgConfirm('Obrisati izložbu?','Izložba „Svjetlo” bit će trajno uklonjena s vašeg profila.','Obriši')),
+'Greška godine':()=>page('artist','',artistProfile({}),`<div class="ov fs"><div class="dlg" role="dialog"><h4>Dodaj izložbu ili projekt</h4>${fld('Naslov','Skupna izložba „Svjetlo”')}<div class="split"><div>${fld('Godina','2031',{er:true,hint:'Godina ne smije biti u budućnosti.'})}</div><div>${fld('Mjesto','Zagreb')}</div></div><div class="act"><button class="btn s">Odustani</button><button class="btn p">Spremi</button></div></div></div>`)
+}});
+function artistProfile(o){const exh=o.empty?`<div class="empty"><div class="ic">🖼</div><b>Još nema izložbi</b>Dodajte izložbe i projekte u kojima ste sudjelovali.</div>`:`<div class="stack">${[['Skupna izložba „Svjetlo”','2024.','Zagreb'],['Rezidencija Vis','2023.','Vis']].map(e=>`<div class="card row"><div><b>${e[0]}</b><div class="note">${e[1]} · ${e[2]}</div></div><span class="sp"></span><button class="btn t sm">Uredi</button><button class="btn t sm" style="color:var(--error)">Obriši</button></div>`).join('')}</div>`;
+return `<div style="max-width:800px"><div class="row mb"><h2>Uređivanje profila</h2><span class="sp"></span><a class="btn s sm" href="#">Pogledaj javni profil</a><a class="btn t sm" href="#">Kopiraj javnu poveznicu</a></div>${o.empty?'<div class="al in2"><span>💡</span><span>Popunite biografiju i dodajte područja umjetnosti kako bi vas organizatori lakše pronašli.</span></div>':''}<div class="card"><div class="row mb"><span class="av" style="width:56px;height:56px;font-size:18px">MH</span><div><b>Marta Horvat</b><div class="note">marta.horvat@gmail.com</div></div></div>${fld('Biografija',o.empty?'':'Slikarica i ilustratorica iz Zagreba, diplomirala na ALU.',{area:true,ph:'Recite nešto o sebi',hint:'0 / 5000'})}${fld('Opis umjetničkog rada',o.empty?'':'Istražujem svjetlo u urbanim prostorima.',{area:true,hint:'0 / 5000'})}<div class="fld"><label>Područja umjetnosti (do 10)</label><div class="row" style="gap:8px">${o.empty?'<span class="note">Ništa odabrano</span>':['Slikarstvo','Ilustracija','Grafika'].map(a=>`<span class="chip" style="background:var(--primary-light);color:#312E81">${a} ✕</span>`).join('')}<button class="btn s sm">+ Dodaj</button></div></div><div class="fld"><label>Poveznice (do 10)</label>${o.empty?'<span class="note">Nema poveznica</span>':`<div class="row" style="margin-bottom:8px"><div class="in" style="flex:1;min-width:120px">Instagram</div><div class="in ${o.er?'er':''}" style="flex:2;min-width:160px">${o.er?'instagram.com/marta':'https://instagram.com/marta.art'}</div><button class="btn t sm" aria-label="Pomakni gore">↑</button><button class="btn t sm" aria-label="Ukloni">✕</button></div>${o.er?'<div class="hint er">Poveznica mora počinjati s http:// ili https://.</div>':''}`}<button class="btn s sm">+ Dodaj poveznicu</button></div><button class="btn p full-xs">Spremi profil</button></div><div class="row mt mb"><h3>Prethodne izložbe i projekti</h3><span class="sp"></span><button class="btn p sm">+ Dodaj</button></div>${exh}</div>`}
+
+S.push({id:'port3',title:'PORT-03 · Moj portfolio i obrazac djela (#100)',info:'/portfolio: mreža kartica (1/2/3–4 stupca), akcije Uredi/Obriši, oznake Javno/Privatno i „Skriveno od administratora”.',states:{
+'Popis djela':()=>page('artist','Portfolio',`<div class="row mb"><h2>Moj portfolio</h2><span class="sp"></span><a class="btn s" href="#">Pogledaj javni portfolio</a><button class="btn p">+ Dodaj djelo</button></div><div class="cols g4">${art(0,'Plavi horizont','2025','Ulje na platnu',chip('PUB'))}${art(1,'Grad u magli','2024','Akvarel',chip('PRIV'))}${art(2,'Tihi dvor','2024','Grafika',chip('PUB')+' '+chip('HID'))}${art(3,'Ljeto','2023','Tuš na papiru',chip('PUB'))}${art(0,'Studija svjetla','2023','Ulje',chip('PUB'))}${art(1,'Obala','2022','Akril',chip('PRIV'))}</div><div class="pag"><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>`),
+'Prazan portfolio':()=>page('artist','Portfolio',`<div class="row mb"><h2>Moj portfolio</h2><span class="sp"></span><button class="btn p">+ Dodaj djelo</button></div><div class="empty"><div class="ic">🎨</div><b>Još nemate djela — dodajte prvo djelo</b>Vaš portfolio je prazan.<div style="margin-top:16px"><button class="btn p">+ Dodaj djelo</button></div></div>`),
+'Učitavanje':()=>page('artist','Portfolio',`<h2>Moj portfolio</h2><div class="cols g4 mt">${[1,2,3,4].map(()=>`<div class="card"><div class="sk" style="aspect-ratio:4/3;height:auto"></div>${skel(2)}</div>`).join('')}</div>`),
+'Obrazac djela':()=>page('artist','Portfolio',artworkForm(false)),
+'Obrazac – greške':()=>page('artist','Portfolio',artworkForm(true)),
+'Brisanje djela':()=>page('artist','Portfolio',`<h2>Moj portfolio</h2><div class="cols g4 mt">${art(0,'Plavi horizont','2025','Ulje na platnu',chip('PUB'))}</div>`,dlgConfirm('Obrisati djelo?','Djelo „Plavi horizont” i njegove slike bit će trajno obrisani.','Obriši')),
+'Djelo nije pronađeno (404)':()=>page('artist','Portfolio',`<div class="empty" style="margin-top:32px"><div class="ic">🔍</div><b>Djelo nije pronađeno</b>Možda je obrisano.<div style="margin-top:16px"><a class="btn p" href="#">Natrag na portfolio</a></div></div>`)
+}});
+function artworkForm(er){return `<div style="max-width:720px"><h2>Novo djelo</h2><div class="card mt">${fld('Naslov',er?'':'Plavi horizont',{er,hint:er?'Naslov je obavezan.':''})}<div class="split"><div>${fld('Godina',er?'1850':'2025',{er,hint:er?'Godina mora biti od 1900. do tekuće.':''})}</div><div>${fld('Tehnika','Ulje na platnu')}</div></div>${fld('Dimenzije','80 × 60 cm')}${fld('Opis','Pogled na more u zoru.',{area:true,hint:'24 / 5000'})}<div class="fld"><label>Slike (do 3)</label><div class="row"><div class="img" style="width:96px"></div><div class="img v2" style="width:96px"></div><div class="empty" style="padding:20px;width:96px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:24px">＋</div></div><div class="hint">JPG, PNG ili WebP, najviše 10 MB po slici.</div></div><div class="fld"><label>Vidljivost</label><div class="seg2"><span class="on">Javno</span><span>Privatno</span></div><div class="hint">Javna djela vide svi posjetitelji. Privatna vidite samo vi.</div></div><div class="row"><button class="btn p full-xs">Spremi</button><button class="btn s">Odustani</button><span class="sp"></span><button class="btn t" style="color:var(--error)">Obriši</button></div></div></div>`}
+
+S.push({id:'port5',title:'PORT-05 · Javni portfolio umjetnika (#112)',info:'/artists/:id: zaglavlje, galerija (2/3/4 stupca), izložbe i odjeljak „Sudjelovanja preko ArtConnecta”. Esc zatvara dijalog, strelice mijenjaju sliku.',states:{
+'Posjetitelj':()=>page('guest','',pubPortfolio(false)),
+'Vlasnik':()=>page('artist','',pubPortfolio(true)),
+'Galerija – dijalog djela':()=>page('guest','',pubPortfolio(false),`<div class="ov fs" style="background:rgba(0,0,0,.85)"><div class="dlg" style="width:760px;background:#fff" role="dialog" aria-label="Plavi horizont"><div class="row"><h4 style="font-size:20px">Plavi horizont</h4><span class="sp"></span><button class="btn t sm" aria-label="Zatvori">✕</button></div><div class="row" style="margin:12px 0"><button class="btn s sm" aria-label="Prethodna slika">‹</button><div class="img" style="flex:1;min-width:200px" role="img" aria-label="Plavi horizont, slika 1 od 3"></div><button class="btn s sm" aria-label="Sljedeća slika">›</button></div><p style="margin:0;color:var(--text2);font-size:14px">Ulje na platnu · 2025. · 80 × 60 cm<br>Pogled na more u zoru.</p></div></div>`),
+'Bez djela i izložbi':()=>page('guest','',pubPortfolio(false,true)),
+'Umjetnik nije pronađen (404)':()=>page('guest','',`<div class="empty" style="margin-top:32px"><div class="ic">🔍</div><b>Umjetnik nije pronađen</b>Profil ne postoji ili više nije dostupan.<div style="margin-top:16px"><a class="btn p" href="#">Pregledaj prilike</a></div></div>`)
+}});
+function pubPortfolio(own,empty){return `${own?'<div class="bar"><b>Ovo je vaš javni profil</b><span class="sp"></span><a class="btn p sm" href="#">Uredi profil</a><a class="btn s sm" href="#">Kopiraj poveznicu</a></div>':''}<div class="card" style="padding:24px"><div class="row" style="align-items:flex-start;gap:20px"><span class="av" style="width:88px;height:88px;font-size:28px">MH</span><div style="flex:1;min-width:220px"><h2>Marta Horvat</h2><div class="row" style="gap:8px;margin:8px 0">${['Slikarstvo','Ilustracija','Grafika'].map(a=>`<span class="chip" style="background:var(--primary-light);color:#312E81">${a}</span>`).join('')}</div><p style="margin:0">Slikarica i ilustratorica iz Zagreba, diplomirala na ALU.</p><h4 style="font-size:16px;margin-top:12px">O mom radu</h4><p style="margin:0;color:var(--text2)">Istražujem svjetlo u urbanim prostorima.</p><div class="row" style="margin-top:12px"><a href="#" style="color:var(--primary);font-weight:600">Instagram ↗</a><a href="#" style="color:var(--primary);font-weight:600">Web stranica ↗</a></div></div></div></div><h3 class="mt mb">Djela</h3>${empty?'<div class="empty"><b>Umjetnik još nema javnih djela</b></div>':`<div class="cols g4">${art(0,'Plavi horizont','2025','Ulje na platnu')}${art(2,'Tihi dvor','2024','Grafika')}${art(3,'Ljeto','2023','Tuš na papiru')}${art(1,'Obala','2022','Akril')}</div><div class="pag"><span class="on">1</span><span>2</span><span>›</span></div>`}${empty?'':`<h3 class="mt mb">Prethodne izložbe i projekti</h3><div class="stack"><div class="card"><b>Skupna izložba „Svjetlo”</b><div class="note">2024. · Zagreb</div></div><div class="card"><b>Rezidencija Vis</b><div class="note">2023. · Vis</div></div></div><h3 class="mt mb">Sudjelovanja preko ArtConnecta</h3><div class="card row"><div><b>Natječaj za mural „Grad”</b><div class="note">Gradska galerija Zagreb · 2026.</div></div><span class="sp"></span>${chip('DONE')}</div>`}`}
+
+S.push({id:'opp1',title:'OPP-01 · Obrazac prilike s lokacijom na karti (#119)',info:'/opportunities/new i uređivanje. Lokacija: Fizička (adresa → „Pronađi na karti”, pomična oznaka, gumb za tipkovnicu) ili Online (poveznica).',states:{
+'Fizička lokacija':()=>page('organizer','Moje prilike',oppForm('phys')),
+'Traženje adrese':()=>page('organizer','Moje prilike',oppForm('search')),
+'Kandidati adrese':()=>page('organizer','Moje prilike',oppForm('cand')),
+'Adresa nije pronađena':()=>page('organizer','Moje prilike',oppForm('nf')),
+'Usluga karte nedostupna (502)':()=>page('organizer','Moje prilike',oppForm('502')),
+'Online':()=>page('organizer','Moje prilike',oppForm('online')),
+'Greške po polju':()=>page('organizer','Moje prilike',oppForm('err'))
+}});
+function oppForm(m){const online=m==='online',er=m==='err';
+const loc=online?`${fld('Poveznica','https://meet.example.com/natjecaj',{})}`:`<div class="split"><div>${fld('Adresa',er?'':'Ilica 85',{er,hint:er?'Adresa je obavezna za fizičku lokaciju.':''})}</div><div class="split" style="grid-template-columns:1fr 2fr!important"><div>${fld('Poštanski broj','10000')}</div><div>${fld('Grad','Zagreb')}</div></div></div><div class="row mb"><button class="btn s">Pronađi na karti</button>${m==='search'?'<span class="note">Tražim adresu…</span>':''}</div>${m==='nf'?'<div class="al wa"><span>ⓘ</span><span>Adresa nije pronađena. Provjerite unos ili postavite oznaku ručno.</span></div>':''}${m==='502'?err('Usluga karte trenutno nije dostupna. Pokušajte kasnije.'):''}${m==='cand'?`<div class="card mb" style="padding:0"><div style="padding:8px 16px;font-weight:600;font-size:14px">Odaberite adresu</div>${['Ilica 85, 10000 Zagreb','Ilica 85A, 10000 Zagreb','Ilica 85, 10110 Zagreb'].map((a,i)=>`<div style="padding:12px 16px;border-top:1px solid var(--divider);font-size:14px">${a}</div>`).join('')}</div>`:''}<div style="position:relative"><div class="map" style="height:240px">${m==='phys'||m==='cand'||m==='search'?'<span class="pin" style="left:48%;top:42%"></span>':''}<span class="attr">© OpenStreetMap contributors</span></div></div><div class="row" style="margin-top:8px"><button class="btn s sm">Postavi oznaku u središte karte</button><span class="note">${m==='phys'?'Oznaku možete povući na točan položaj.':'Oznaka nije postavljena.'}</span></div>`;
+return `<div style="max-width:800px"><h2>Nova prilika</h2><div class="card mt">${fld('Naslov',er?'':'Natječaj za mural „Grad”',{er,hint:er?'Naslov je obavezan.':''})}${fld('Opis','Tražimo umjetnike za izradu murala na fasadi galerije.',{area:true,hint:'61 / 10000'})}<div class="split"><div>${fld('Vrsta','Natječaj')}</div><div>${fld('Rok prijave',er?'01.01.2020. 12:00':'30.11.2026. 23:59',{er,hint:er?'Rok mora biti u budućnosti.':''})}</div></div><div class="fld"><label>Područja umjetnosti (1–10)</label><div class="row" style="gap:8px">${['Slikarstvo','Street art'].map(a=>`<span class="chip" style="background:var(--primary-light);color:#312E81">${a} ✕</span>`).join('')}<button class="btn s sm">+ Dodaj</button></div></div>${fld('Kriteriji (informativno)','Iskustvo u radu na velikim formatima.',{area:true})}${fld('Nagrada','2.000 €')}<div class="split"><div>${fld('Početak događanja','15.01.2027. 10:00')}</div><div>${fld('Kraj događanja','30.01.2027. 18:00')}</div></div></div><div class="card mt"><h4 class="mb">Lokacija</h4><div class="seg2 mb"><span class="${online?'':'on'}">Fizička</span><span class="${online?'on':''}">Online</span></div><div style="margin-top:16px">${loc}</div></div><div class="card mt" style="border:2px dashed var(--divider);box-shadow:none"><h4>Zahtjevi prijave</h4><p>Ovdje će se uređivati zahtjevi prijave (zadatak APP-01).</p></div><div class="row mt"><button class="btn p full-xs">Spremi</button><button class="btn s">Odustani</button></div></div>`}
+
+S.push({id:'opp2',title:'OPP-02 · Javni popis prilika i detalj prilike (#126)',info:'/opportunities: filtri, sortiranje, popis ili karta; na mobitelu filtri u ladici. /opportunities/:id: detalj s kartom, a vlasnik vidi traku radnji.',states:{
+'Popis':()=>page('guest','Prilike',oppList('list')),
+'Karta':()=>page('guest','Prilike',oppList('map')),
+'Filtri (mobitel)':()=>page('guest','Prilike',oppList('list'),`<div class="ov fs" style="align-items:flex-end;padding:0"><div class="dlg" style="border-radius:16px 16px 0 0;width:100%"><div class="row"><h4>Filtri</h4><span class="sp"></span><button class="btn t sm">Očisti filtre</button></div>${fld('Ključna riječ','',{ph:'Pretraži prilike'})}${fld('Područja','Slikarstvo, Grafika')}${fld('Grad','Zagreb')}${fld('Status','Otvoreno')}<div class="act"><button class="btn p full-xs">Prikaži 12 rezultata</button></div></div></div>`),
+'Učitavanje':()=>page('guest','Prilike',`<h2>Prilike</h2><div class="cols mt">${[1,2,3].map(()=>`<div class="card">${skel(4)}</div>`).join('')}</div>`),
+'Nema rezultata':()=>page('guest','Prilike',`<h2>Prilike</h2><div class="empty mt"><div class="ic">🔍</div><b>Nema prilika za odabrane filtre</b>Pokušajte s drugim filtrima.<div style="margin-top:16px"><button class="btn s">Očisti filtre</button></div></div>`),
+'Detalj (posjetitelj)':()=>page('guest','Prilike',oppDetail(false)),
+'Detalj (vlasnik)':()=>page('organizer','Moje prilike',oppDetail(true)),
+'Detalj – online':()=>page('guest','Prilike',oppDetail(false,true)),
+'Prilika nije pronađena (404)':()=>page('guest','Prilike',`<div class="empty" style="margin-top:32px"><div class="ic">🔍</div><b>Prilika nije pronađena</b>Možda je uklonjena.<div style="margin-top:16px"><a class="btn p" href="#">Sve prilike</a></div></div>`)
+}});
+function oppList(view){const cards=`${opp(1,'Natječaj za mural „Grad”','Gradska galerija Zagreb','OPEN','30.11.2026.','Natječaj','Zagreb')}${opp(2,'Rezidencija na Visu','Udruga Otok','OPEN','15.12.2026.','Rezidencija','Vis')}${opp(3,'Izložba „Svjetlo”','Galerija Gradec','SELECTION','01.11.2026.','Izložba','Zagreb')}${opp(4,'Online radionica ilustracije','Art Hub','OPEN','20.11.2026.','Radionica','Online')}${opp(5,'Grafički bijenale','Muzej suvremene umjetnosti','FINISHED','01.09.2026.','Natječaj','Rijeka')}${opp(6,'Pop-up izložba','Kulturni centar','OPEN','05.12.2026.','Izložba','Split')}`;
+const filters=`<div class="fil full">${fld('Ključna riječ','',{ph:'Pretraži prilike'}).replace('class="fld"','class="fld" style="flex:2"')}${fld('Područje','Sva područja')}${fld('Vrsta','Sve vrste')}${fld('Grad','Svi gradovi')}${fld('Lokacija','Sve')}${fld('Status','Otvoreno')}${fld('Rok prijave','Bilo kada')}<button class="btn t sm">Očisti filtre</button></div>`;
+const body=view==='list'?`<div class="cols">${cards}</div><div class="pag"><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>`:`<div class="al in2"><span>ⓘ</span><span>Na karti je prikazano prvih 100 rezultata. 2 prilike nemaju lokaciju (online).</span></div><div class="split" style="grid-template-columns:2fr 1fr"><div style="min-height:420px;position:relative"><div class="map" style="min-height:420px"><span class="pin" style="left:30%;top:35%"></span><span class="pin" style="left:62%;top:55%"></span><span class="pin" style="left:45%;top:70%"></span><div class="pop" style="left:34%;top:12%"><b>Natječaj za mural „Grad”</b><br><a href="#" style="color:var(--primary);font-weight:600">Detalji</a></div><span class="attr">© OpenStreetMap contributors</span></div></div><div class="stack">${opp(1,'Natječaj za mural „Grad”','Gradska galerija Zagreb','OPEN','30.11.2026.','Natječaj','Zagreb')}${opp(2,'Rezidencija na Visu','Udruga Otok','OPEN','15.12.2026.','Rezidencija','Vis')}</div></div>`;
+return `<div class="row mb"><div><h2>Prilike</h2><p class="sub">Pronađeno 134 prilike</p></div><span class="sp"></span><div class="seg2" role="group" aria-label="Prikaz"><span class="${view==='list'?'on':''}">Popis</span><span class="${view==='map'?'on':''}">Karta</span></div></div>${filters}<div class="row mb"><button class="btn s flt-btn">Filtri</button><span class="sp"></span><div class="fld" style="margin:0;min-width:200px"><div class="in" style="min-height:36px;padding:4px 12px">Sortiraj: najbliži rok ▾</div></div></div>${body}`}
+function oppDetail(own,online){return `${own?`<div class="bar"><b>Vi ste vlasnik prilike</b>${chip('OPEN')}<span class="sp"></span>${ownerBar()}</div>`:''}<div class="split" style="grid-template-columns:2fr 1fr;align-items:start"><div class="card" style="padding:24px"><div class="row">${chip('OPEN')}<span class="note">Natječaj</span></div><h2 style="margin-top:8px">Natječaj za mural „Grad”</h2><p class="sub">Gradska galerija Zagreb</p><h4 class="mt">Opis</h4><p style="font-size:16px;line-height:24px;color:var(--text)">Tražimo umjetnike za izradu murala na fasadi galerije. Tema je grad i njegova svjetla.</p><h4 class="mt">Kriteriji</h4><p style="font-size:16px;line-height:24px;color:var(--text)">Iskustvo u radu na velikim formatima.</p><div class="row mt">${['Slikarstvo','Street art'].map(a=>`<span class="chip" style="background:var(--primary-light);color:#312E81">${a}</span>`).join('')}</div></div><div class="stack"><div class="card"><p style="margin:0">Rok prijave</p><b style="font-size:20px">30.11.2026. 23:59</b><p>Nagrada: <b style="color:var(--text)">2.000 €</b></p><p>Događanje: 15.01. – 30.01.2027.</p><div style="margin-top:16px"><a class="btn p full-xs" style="width:100%" href="#">Prijavi se</a></div></div><div class="card"><h4 style="font-size:16px">Lokacija</h4>${online?'<p><a href="#" style="color:var(--primary);font-weight:600">https://meet.example.com/natjecaj ↗</a></p>':`<p>Ilica 85, 10000 Zagreb</p><div class="map" style="min-height:160px;margin-top:8px"><span class="pin" style="left:46%;top:40%"></span><span class="attr">© OpenStreetMap contributors</span></div><p><a href="#" style="color:var(--primary);font-weight:600">Otvori na OpenStreetMapu ↗</a></p>`}</div></div></div>`}
+function ownerBar(){return `<a class="btn s sm" href="#">Uredi</a><button class="btn p sm">Zatvori prijave</button><button class="btn s sm">Arhiviraj</button><button class="btn t sm" style="color:var(--error)">Obriši</button>`}
+
+S.push({id:'opp3',title:'OPP-03 · Moje prilike i traka radnji vlasnika (#133)',info:'Popis prilika organizatora s filtrom statusa i izbornikom radnji. Svaki prijelaz statusa traži potvrdu.',states:{
+'Aktivne':()=>page('organizer','Moje prilike',myOpps('act')),
+'Arhivirane':()=>page('organizer','Moje prilike',myOpps('arh')),
+'Prazno':()=>page('organizer','Moje prilike',`<div class="row mb"><h2>Moje prilike</h2><span class="sp"></span><button class="btn p">+ Nova prilika</button></div><div class="empty"><div class="ic">📣</div><b>Još nemate prilika</b>Objavite prvu priliku i primajte prijave umjetnika.<div style="margin-top:16px"><button class="btn p">+ Nova prilika</button></div></div>`),
+'Učitavanje':()=>page('organizer','Moje prilike',`<h2>Moje prilike</h2><div class="card mt">${skel(5)}</div>`),
+'Izbornik radnji':()=>page('organizer','Moje prilike',myOpps('act'),`<div class="menu" style="top:300px;right:48px;width:240px"><a href="#">Uredi</a><a href="#">Zatvori prijave</a><a href="#">Započni odabir</a><a href="#">Arhiviraj</a><a href="#" style="color:var(--error)">Obriši</a></div>`),
+'Potvrda: Objavi':()=>page('organizer','Moje prilike',myOpps('act'),dlgConfirm('Objaviti priliku?','Prilika će postati javno vidljiva i umjetnici će se moći prijaviti. Nakon objave neka polja više nećete moći mijenjati.','Objavi').replace('btn d','btn p')),
+'Potvrda: Zatvori prijave':()=>page('organizer','Moje prilike',myOpps('act'),dlgConfirm('Zatvoriti prijave?','Umjetnici se više neće moći prijaviti. Prijave možete ponovno otvoriti prije isteka roka.','Zatvori prijave').replace('btn d','btn p')),
+'Brisanje: ima prijave':()=>page('organizer','Moje prilike',myOpps('act'),`<div class="ov fs"><div class="dlg" role="dialog"><h4>Prilika se ne može obrisati</h4><p style="margin:0;color:var(--text2)">Prilika „Natječaj za mural” ima 7 prijava pa je nije moguće obrisati. Želite li je arhivirati?</p><div class="act"><button class="btn s">Odustani</button><button class="btn p">Arhiviraj</button></div></div></div>`),
+'Brisanje (potvrda)':()=>page('organizer','Moje prilike',myOpps('act'),dlgConfirm('Obrisati priliku?','Prilika „Pop-up izložba” bit će trajno obrisana.','Obriši')),
+'Greška: istekao rok':()=>page('organizer','Moje prilike',`<div style="margin-bottom:16px">${err('Prilika se ne može ponovno otvoriti jer je rok prijave istekao.')}</div>`+myOpps('act'))
+}});
+function myOpps(tab){const rows=tab==='act'?[['Natječaj za mural „Grad”','OPEN','30.11.2026.','Natječaj',7],['Izložba „Svjetlo”','SELECTION','01.11.2026.','Izložba',23],['Pop-up izložba','PREPARATION','05.12.2026.','Izložba',0]]:[['Grafički bijenale 2025','FINISHED','01.09.2025.','Natječaj',41],['Rezidencija 2025','ARCH','15.06.2025.','Rezidencija',12]];
+return `<div class="row mb"><h2>Moje prilike</h2><span class="sp"></span><button class="btn p">+ Nova prilika</button></div><div class="row mb"><div class="seg2" role="tablist"><span class="${tab==='act'?'on':''}">Aktivne</span><span class="${tab==='arh'?'on':''}">Arhivirane</span></div><span class="sp"></span><div class="fld" style="margin:0;min-width:180px"><div class="in" style="min-height:36px;padding:4px 12px">Status: Svi ▾</div></div></div><table class="tb resp"><thead><tr><th>Naslov</th><th>Status</th><th>Rok</th><th>Vrsta</th><th>Prijave</th><th></th></tr></thead><tbody>${rows.map(r=>`<tr><td><b>${r[0]}</b></td><td>${chip(r[1])}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td><button class="btn t sm" aria-label="Radnje">⋮ Radnje</button></td></tr>`).join('')}</tbody></table><div class="pag"><span class="on">1</span></div>`}
+
+S.push({id:'adm1',title:'ADM-01 · Administracija: korisnici, uloga, blokiranje (#204)',info:'/admin s podnavigacijom (bočna na desktopu, kartice na mobitelu). Dijalozi navode posljedice promjene uloge i blokiranja.',states:{
+'Korisnici':()=>page('admin','Administracija',adminUsers({})),
+'Mobitel: kartice':()=>page('admin','Administracija',adminUsers({})),
+'Učitavanje':()=>page('admin','Administracija',adminUsers({load:true})),
+'Prazno (filtar)':()=>page('admin','Administracija',adminUsers({empty:true})),
+'Promijeni ulogu':()=>page('admin','Administracija',adminUsers({}),`<div class="ov fs"><div class="dlg" role="dialog"><h4>Promijeni ulogu</h4><p style="margin:0">Korisnik: <b>Goran Grgić</b> (Organizator)</p>${fld('Nova uloga','Umjetnik')}<div class="al wa"><span>⚠</span><div>Posljedice promjene iz uloge organizatora:<ul style="color:#92400E"><li>sve otvorene prilike se zatvaraju;</li><li>korisnik se odjavljuje sa svih uređaja.</li></ul></div></div><div class="act"><button class="btn s">Odustani</button><button class="btn p">Promijeni ulogu</button></div></div></div>`),
+'Greška: zadnji admin':()=>page('admin','Administracija',adminUsers({}),`<div class="ov fs"><div class="dlg" role="dialog"><h4>Promijeni ulogu</h4>${err('Ne možete ukloniti ulogu zadnjem administratoru.')}<div class="act"><button class="btn s">Zatvori</button></div></div></div>`),
+'Blokiraj':()=>page('admin','Administracija',adminUsers({}),`<div class="ov fs"><div class="dlg" role="dialog"><h4>Blokirati korisnika?</h4><p style="margin:0">Marta Horvat (marta.horvat@gmail.com)</p><div class="al wa" style="margin-top:12px"><span>⚠</span><div>Posljedice blokiranja:<ul style="color:#92400E"><li>korisnik se odjavljuje;</li><li>javni sadržaj se skriva;</li><li>otvorene prilike se zatvaraju.</li></ul></div></div><div class="act"><button class="btn s">Odustani</button><button class="btn d">Blokiraj</button></div></div></div>`),
+'Odblokiraj':()=>page('admin','Administracija',adminUsers({}),dlgConfirm('Odblokirati korisnika?','Korisnik će se ponovno moći prijaviti. Prilike koje su zatvorene ostaju zatvorene.','Odblokiraj').replace('btn d','btn p')),
+'Greška: vlastiti račun':()=>page('admin','Administracija',`<div style="margin-bottom:16px">${err('Ne možete blokirati vlastiti račun.')}</div>`+adminUsers({})),
+'Pristup zabranjen (403)':()=>page('artist','',`<div class="empty" style="margin-top:32px"><div class="ic">⛔</div><b>Pristup zabranjen</b>Nemate ovlasti za ovu stranicu.<div style="margin-top:16px"><a class="btn p" href="#">Na početnu</a></div></div>`)
+}});
+function adminUsers(o){const users=[['Marta Horvat','marta.horvat@gmail.com','ART','ACT','—','12.09.2026.'],['Goran Grgić','goran@gradec.hr','ORG','ACT','WAIT','10.10.2026.'],['Ana Kovač','ana.kovac@gmail.com','ORG','ACT','OK','01.10.2026.'],['Ivo Babić','ivo.b@gmail.com','ART','BLK','—','28.09.2026.']];
+const table=o.load?`<div class="card">${skel(6)}</div>`:o.empty?`<div class="empty"><div class="ic">🔍</div><b>Nema korisnika za odabrane filtre</b></div>`:`<table class="tb resp"><caption>Korisnici</caption><thead><tr><th>Ime</th><th>E-mail</th><th>Uloga</th><th>Status</th><th>Odobrenje</th><th>Registriran</th><th></th></tr></thead><tbody>${users.map(u=>`<tr><td><b>${u[0]}</b></td><td>${u[1]}</td><td>${chip(u[2])}</td><td>${chip(u[3])}</td><td>${u[4]==='—'?'—':chip(u[4])}</td><td>${u[5]}</td><td><div class="row" style="gap:4px;flex-wrap:nowrap"><button class="btn t sm">Uloga</button><button class="btn t sm" style="color:var(--error)">${u[3]==='BLK'?'Odblokiraj':'Blokiraj'}</button></div></td></tr>`).join('')}</tbody></table><div class="pag"><span class="on">1</span><span>2</span><span>›</span></div>`;
+return `<div class="side"><nav aria-label="Administracija"><a class="on" href="#">Korisnici</a><a href="#">Izvještaji</a><a href="#">Šifrarnici</a><a href="#">Postavke</a></nav><div><h2>Korisnici</h2><div class="fil mt">${fld('Pretraga','',{ph:'Ime ili e-mail'})}${fld('Uloga','Sve')}${fld('Status','Svi')}${fld('Odobrenje','Sva')}</div>${table}</div></div>`}
+
+S.push({id:'stat1',title:'STAT-01 · Statistika organizatora (#247)',info:'/organizer/statistics: KPI kartica „Prihvaćeni umjetnici” i dvije tablice. Povučene prijave nisu uključene.',states:{
+'Zadano':()=>page('organizer','Statistika',stats('data')),
+'Učitavanje':()=>page('organizer','Statistika',stats('load')),
+'Prazno':()=>page('organizer','Statistika',stats('empty')),
+'Greška':()=>page('organizer','Statistika',stats('err')),
+'Pristup zabranjen (403)':()=>page('artist','',`<div class="empty" style="margin-top:32px"><div class="ic">⛔</div><b>Pristup zabranjen</b>Statistika je dostupna samo organizatorima.<div style="margin-top:16px"><a class="btn p" href="#">Na početnu</a></div></div>`)
+}});
+function stats(m){let b;if(m==='load')b=`<div class="card">${skel(2)}</div><div class="split mt"><div class="card">${skel(5)}</div><div class="card">${skel(5)}</div></div>`;
+else if(m==='empty')b=`<div class="empty"><div class="ic">📊</div><b>Još nema prijava na tvoje prilike.</b>Statistika će se pojaviti čim stignu prve prijave.<div style="margin-top:16px"><a class="btn p" href="#">Nova prilika</a></div></div>`;
+else if(m==='err')b=`${err('Statistika se nije mogla učitati.')}<button class="btn s">Pokušaj ponovno</button>`;
+else b=`<div class="card" style="max-width:360px"><p style="margin:0;font-weight:600;color:var(--text)">Prihvaćeni umjetnici</p><div class="kpi">18</div><p>Različiti umjetnici s barem jednom prihvaćenom prijavom.</p></div><div class="split mt" style="align-items:start"><table class="tb"><caption>Prijave po području umjetnosti</caption><thead><tr><th scope="col">Područje</th><th scope="col">Prijave</th></tr></thead><tbody><tr><td>Slikarstvo</td><td>42</td></tr><tr><td>Grafika</td><td>25</td></tr><tr><td>Ilustracija</td><td>19</td></tr><tr><td>Street art</td><td>11</td></tr></tbody></table><table class="tb"><caption>Prijave po prilici</caption><thead><tr><th scope="col">Prilika</th><th scope="col">Prijave</th></tr></thead><tbody><tr><td><a href="#" style="color:var(--primary);font-weight:600">Natječaj za mural „Grad”</a></td><td>41</td></tr><tr><td><a href="#" style="color:var(--primary);font-weight:600">Izložba „Svjetlo”</a></td><td>23</td></tr><tr><td><a href="#" style="color:var(--primary);font-weight:600">Pop-up izložba</a></td><td>0</td></tr></tbody></table></div><p class="note mt">Povučene prijave nisu uključene.</p>`;
+return `<h2 class="mb">Statistika</h2>${b}`}
+
+/* ---------- upravljanje pregledom ---------- */
+const $=s=>document.querySelector(s);let cur=0,stName=null;
+const sc=$('#sc');S.forEach((s,i)=>sc.insertAdjacentHTML('beforeend',`<option value="${i}">${s.title}</option>`));
+function render(){const s=S[cur];const names=Object.keys(s.states);if(!names.includes(stName))stName=names[0];
+ $('#states').innerHTML=names.map(n=>`<button class="${n===stName?'on':''}" data-n="${n.replace(/"/g,'&quot;')}">${n}</button>`).join('');
+ $('#info').textContent=s.info;$('#frame').innerHTML=s.states[stName]();
+ try{history.replaceState(null,'','#'+s.id+'/'+encodeURIComponent(stName))}catch(e){}}
+sc.onchange=()=>{cur=+sc.value;stName=null;render()};
+$('#states').onclick=e=>{const b=e.target.closest('button');if(b){stName=b.dataset.n;render()}};
+$('#vp').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('#vp button').forEach(x=>x.classList.toggle('on',x===b));$('#frame').style.width=b.dataset.w+'px'};
+(function(){const h=location.hash.slice(1).split('/');const i=S.findIndex(s=>s.id===h[0]);if(i>=0){cur=i;sc.value=i;if(h[1])stName=decodeURIComponent(h[1])}render()})();
+</script>
+</body>
+</html>
