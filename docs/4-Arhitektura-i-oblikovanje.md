@@ -301,6 +301,21 @@ DTO-i s vremenom koriste `OffsetDateTime`. Postavke Jacksona 3 u `application.ym
 
 Testovi u `backend/src/test/java/hr/fer/artconnect/common` provjeravaju greške kroz MockMvc, hrvatske poruke, datume, straničenje i sortiranje. Test uploada provjerava obradu iznimke; stvarni upload pripada zadatku za datoteke. Iz `backend` pokrenuti `./mvnw -B verify` uz Javu 25 i Docker. Samo ovi testovi mogu se pokrenuti bez Dockera: `./mvnw -B '-Dtest=hr.fer.artconnect.common.*Test' verify`.
 
+### Korisničko sučelje i pristupačnost
+
+Vizualni jezik definira zadatak FND-06-DES (#11). Dizajn je isporučen kao dokumentacija u repozitoriju. Nacrt je u [`design-system/`](design-system/): [`tokens.md`](design-system/tokens.md) (tablice tokena), [`theme.ts`](design-system/theme.ts) (MUI tema, polazište za frontend) i [`preview.html`](design-system/preview.html) (pregled komponenata i wireframeova, otvara se u pregledniku).
+
+Sučelje se gradi na MUI-ju, a svi ekrani koriste iste tokene:
+
+- **Boje:** primarna `#4338CA`, sekundarna `#BE185D`, pozadina `#FAFAF9`, površina `#FFFFFF`, tekst `#1C1917` / `#57534E`, greška `#B91C1C`, upozorenje `#B45309`, uspjeh `#15803D`. Kontrast teksta je svugdje najmanje 4.5:1.
+- **Tipografija:** Inter (podržava hrvatske dijakritike), naslovi h1–h6 od 36 do 16 px, osnovni tekst 16/24 px, gumbi bez velikih slova.
+- **Razmaci i oblici:** MUI `spacing` 8 px; radijusi 8 px (gumbi, polja), 12 px (kartice), 16 px (chip, dijalog).
+- **Prijelomne točke:** xs < 600, sm 600–899, md ≥ 900 px.
+- **Statusi:** prilike (`PREPARATION`…`FINISHED`) i prijave (`SUBMITTED`…`WITHDRAWN`) prikazuju se chipom s hrvatskim tekstom i bojom; status se nikad ne prenosi samo bojom.
+- **Navigacija po ulozi:** posjetitelj vidi „Prilike” i „Prijava s Googleom”; umjetnik „Portfolio” i „Moje prijave”; organizator „Moje prilike” i „Statistika”; administrator „Administracija”; prijavljeni korisnik ima izbornik „Profil” / „Odjava”. Na xs navigacija je u izborniku (drawer) koji se zatvara tipkom Esc.
+
+Pristupačnost: sučelje je na hrvatskom (`<html lang="hr">`), svi interaktivni elementi dostupni su tipkovnicom s vidljivim fokusom (prsten 3 px u primarnoj boji), ciljne površine dodira su najmanje 44 × 44 px, a polja obrasca imaju oznaku i poruku greške povezanu s poljem.
+
 ## 4.7 Arhitekturni rizici i tehnički dug
 
 **Cilj:** Navesti stvarne tehničke ili domenske rizike i svjesno prihvaćene kompromise oblikovanja, njihove posljedice i način na koji ih tim obrađuje.
