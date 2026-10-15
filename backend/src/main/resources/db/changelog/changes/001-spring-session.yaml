@@ -1,0 +1,120 @@
+databaseChangeLog:
+  - changeSet:
+      id: FND-03-DB-create-spring-session
+      author: lukadimjasevic
+      comment: Tablica sesija prema službenoj shemi Spring Session JDBC-a
+      changes:
+        - createTable:
+            tableName: spring_session
+            columns:
+              - column:
+                  name: primary_id
+                  type: char(36)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: spring_session_pk
+              - column:
+                  name: session_id
+                  type: char(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_time
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_access_time
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_inactive_interval
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_time
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: principal_name
+                  type: varchar(100)
+      rollback:
+        - dropTable:
+            tableName: spring_session
+
+  - changeSet:
+      id: FND-03-DB-index-spring-session
+      author: lukadimjasevic
+      comment: Indeksi sesija
+      changes:
+        - createIndex:
+            tableName: spring_session
+            indexName: spring_session_ix1
+            unique: true
+            columns:
+              - column:
+                  name: session_id
+        - createIndex:
+            tableName: spring_session
+            indexName: spring_session_ix2
+            columns:
+              - column:
+                  name: expiry_time
+        - createIndex:
+            tableName: spring_session
+            indexName: spring_session_ix3
+            columns:
+              - column:
+                  name: principal_name
+      rollback:
+        - dropIndex:
+            tableName: spring_session
+            indexName: spring_session_ix3
+        - dropIndex:
+            tableName: spring_session
+            indexName: spring_session_ix2
+        - dropIndex:
+            tableName: spring_session
+            indexName: spring_session_ix1
+
+  - changeSet:
+      id: FND-03-DB-create-spring-session-attributes
+      author: lukadimjasevic
+      comment: Atributi sesije, brišu se kaskadno sa sesijom
+      changes:
+        - createTable:
+            tableName: spring_session_attributes
+            columns:
+              - column:
+                  name: session_primary_id
+                  type: char(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attribute_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: attribute_bytes
+                  type: bytea
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: spring_session_attributes
+            columnNames: session_primary_id, attribute_name
+            constraintName: spring_session_attributes_pk
+        - addForeignKeyConstraint:
+            constraintName: spring_session_attributes_fk
+            baseTableName: spring_session_attributes
+            baseColumnNames: session_primary_id
+            referencedTableName: spring_session
+            referencedColumnNames: primary_id
+            onDelete: CASCADE
+      rollback:
+        - dropTable:
+            tableName: spring_session_attributes

@@ -1,0 +1,63 @@
+@startuml
+' ER dijagram tablica uvedenih zadatkom FND-03 (changesetovi 001-003).
+' Dopunjuje se kako epici dodaju svoje tablice (users, artworks, opportunities...).
+hide circle
+hide methods
+skinparam linetype ortho
+
+package "Šifrarnici (modul catalog)" {
+  entity "art_fields" as art_fields {
+    * id : uuid <<PK>>
+    --
+    * code : varchar(40) <<UNIQUE>>
+    * name : varchar(80) <<UNIQUE>>
+    * active : boolean = true
+    * position : smallint = 0
+  }
+
+  entity "opportunity_types" as opportunity_types {
+    * id : uuid <<PK>>
+    --
+    * code : varchar(40) <<UNIQUE>>
+    * name : varchar(80) <<UNIQUE>>
+    * active : boolean = true
+    * position : smallint = 0
+  }
+}
+
+entity "system_settings" as system_settings {
+  * key : varchar(64) <<PK>>
+  --
+  * value : varchar(255)
+  * updated_at : timestamptz = now()
+  updated_by : uuid
+}
+
+package "Spring Session JDBC (infrastruktura)" {
+  entity "spring_session" as spring_session {
+    * primary_id : char(36) <<PK>>
+    --
+    * session_id : char(36) <<UNIQUE>>
+    * creation_time : bigint
+    * last_access_time : bigint
+    * max_inactive_interval : int
+    * expiry_time : bigint
+    principal_name : varchar(100)
+  }
+
+  entity "spring_session_attributes" as spring_session_attributes {
+    * session_primary_id : char(36) <<PK>> <<FK>>
+    * attribute_name : varchar(200) <<PK>>
+    --
+    * attribute_bytes : bytea
+  }
+}
+
+spring_session ||--o{ spring_session_attributes : "ON DELETE CASCADE"
+
+note bottom of system_settings
+  Ograničenja uploada koja administrator mijenja bez deploya.
+  FK updated_by -> users(id) dodaje AUTH changeset
+  kad tablica users nastane.
+end note
+@enduml

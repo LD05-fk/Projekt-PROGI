@@ -1,1 +1,10 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - include:
+      file: changes/001-spring-session.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/002-system-settings.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changes/003-catalogs.yaml
+      relativeToChangelogFile: true

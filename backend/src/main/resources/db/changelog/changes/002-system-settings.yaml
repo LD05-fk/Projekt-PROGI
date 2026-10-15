@@ -1,0 +1,69 @@
+# FK updated_by -> users(id) dodaje AUTH changeset kad tablica users nastane.
+databaseChangeLog:
+  - changeSet:
+      id: FND-03-DB-create-system-settings
+      author: lukadimjasevic
+      comment: Tablica postavki sustava
+      changes:
+        - createTable:
+            tableName: system_settings
+            columns:
+              - column:
+                  name: key
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_system_settings
+              - column:
+                  name: value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_by
+                  type: uuid
+      rollback:
+        - dropTable:
+            tableName: system_settings
+
+  - changeSet:
+      id: FND-03-DB-seed-system-settings
+      author: lukadimjasevic
+      comment: Početna ograničenja uploada
+      changes:
+        - insert:
+            tableName: system_settings
+            columns:
+              - column: { name: key, value: upload.artwork.maxImageBytes }
+              - column: { name: value, value: "5242880" }
+        - insert:
+            tableName: system_settings
+            columns:
+              - column: { name: key, value: upload.artwork.maxImagesPerArtwork }
+              - column: { name: value, value: "3" }
+        - insert:
+            tableName: system_settings
+            columns:
+              - column: { name: key, value: upload.application.maxImageBytes }
+              - column: { name: value, value: "5242880" }
+        - insert:
+            tableName: system_settings
+            columns:
+              - column: { name: key, value: upload.application.maxPdfBytes }
+              - column: { name: value, value: "10485760" }
+        - insert:
+            tableName: system_settings
+            columns:
+              - column: { name: key, value: upload.application.maxFiles }
+              - column: { name: value, value: "10" }
+      rollback:
+        - delete:
+            tableName: system_settings
+            where: "key in ('upload.artwork.maxImageBytes', 'upload.artwork.maxImagesPerArtwork', 'upload.application.maxImageBytes', 'upload.application.maxPdfBytes', 'upload.application.maxFiles')"
